@@ -32,13 +32,26 @@ type FormData = z.infer<typeof formSchema>
 
 function FieldError({ message }: { message?: string }) {
   if (!message) return null
-  return <p className="mt-1 text-xs text-red-600">{message}</p>
+  return <p className="mt-1.5 text-xs text-red-600">{message}</p>
 }
 
 function inputClass(hasError: boolean) {
-  return `w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600 ${
-    hasError ? 'border-red-400 bg-red-50' : 'border-gray-300'
+  return `w-full rounded-lg border px-3.5 py-2.5 text-sm bg-park-cream text-park-dark placeholder:text-park-muted/50 focus:outline-none focus:ring-2 transition-colors ${
+    hasError
+      ? 'border-red-400 bg-red-50 focus:border-red-400 focus:ring-red-200'
+      : 'border-park-border focus:border-park-green focus:ring-park-green/15'
   }`
+}
+
+function SectionHeader({ children, sub }: { children: React.ReactNode; sub?: string }) {
+  return (
+    <div className="mb-5">
+      <h2 className="font-display font-bold text-lg uppercase text-park-dark leading-tight">
+        {children}
+      </h2>
+      {sub && <p className="mt-1 text-sm text-park-muted">{sub}</p>}
+    </div>
+  )
 }
 
 export default function RegistrationForm({
@@ -111,19 +124,20 @@ export default function RegistrationForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      {/* Hidden session id */}
       <input type="hidden" {...register('sessionId')} />
 
-      <div className="rounded-lg border border-gray-200 bg-white p-8 shadow-sm space-y-8">
-        {/* Guardian / contact details */}
-        <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-1">Your contact details</h2>
-          <p className="text-sm text-gray-500 mb-4">
-            We&apos;ll send your confirmation to the email address below.
-          </p>
+      <div className="space-y-4">
+        {/* Contact details */}
+        <section className="rounded-xl bg-park-white border border-park-border p-6 sm:p-8">
+          <SectionHeader sub="We'll send your confirmation to the email address below.">
+            Your contact details
+          </SectionHeader>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="guardian-first-name" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="guardian-first-name"
+                className="block text-xs font-semibold text-park-muted uppercase tracking-wider mb-1.5"
+              >
                 First name <span className="text-red-500">*</span>
               </label>
               <input
@@ -136,7 +150,10 @@ export default function RegistrationForm({
               <FieldError message={errors.guardian?.firstName?.message} />
             </div>
             <div>
-              <label htmlFor="guardian-last-name" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="guardian-last-name"
+                className="block text-xs font-semibold text-park-muted uppercase tracking-wider mb-1.5"
+              >
                 Last name <span className="text-red-500">*</span>
               </label>
               <input
@@ -149,7 +166,10 @@ export default function RegistrationForm({
               <FieldError message={errors.guardian?.lastName?.message} />
             </div>
             <div className="sm:col-span-2">
-              <label htmlFor="guardian-email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="guardian-email"
+                className="block text-xs font-semibold text-park-muted uppercase tracking-wider mb-1.5"
+              >
                 Email address <span className="text-red-500">*</span>
               </label>
               <input
@@ -162,9 +182,12 @@ export default function RegistrationForm({
               <FieldError message={errors.guardian?.email?.message} />
             </div>
             <div>
-              <label htmlFor="guardian-phone" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="guardian-phone"
+                className="block text-xs font-semibold text-park-muted uppercase tracking-wider mb-1.5"
+              >
                 Phone{' '}
-                <span className="text-gray-400 font-normal">(optional)</span>
+                <span className="text-park-muted/60 font-normal normal-case tracking-normal">(optional)</span>
               </label>
               <input
                 id="guardian-phone"
@@ -180,28 +203,29 @@ export default function RegistrationForm({
         </section>
 
         {/* Participants */}
-        <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-1">Participants</h2>
-          <p className="text-sm text-gray-500 mb-4">
-            Register yourself and up to {REGISTRATION.MAX_PARTICIPANTS_PER_SUBMISSION - 1} children
-            in your care.
-          </p>
-          <div className="space-y-4">
+        <section className="rounded-xl bg-park-white border border-park-border p-6 sm:p-8">
+          <SectionHeader
+            sub={`Register yourself and up to ${REGISTRATION.MAX_PARTICIPANTS_PER_SUBMISSION - 1} children in your care.`}
+          >
+            Participants
+          </SectionHeader>
+
+          <div className="space-y-3">
             {fields.map((field, index) => {
               const isAdded = index > 0
               const pErrors = errors.participants?.[index]
               return (
                 <div
                   key={field.id}
-                  className="rounded-md border border-gray-200 p-4 space-y-4"
+                  className="rounded-lg border border-park-border bg-park-cream p-4 space-y-4"
                 >
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
-                      <p className="text-sm font-medium text-gray-700">
+                      <span className="font-display font-bold text-sm uppercase text-park-dark">
                         {index === 0 ? 'You (participant 1)' : `Child ${index}`}
-                      </p>
+                      </span>
                       {isAdded && (
-                        <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700">
+                        <span className="rounded-full bg-park-green/10 px-2 py-0.5 text-xs font-semibold text-park-green uppercase tracking-wide">
                           Child
                         </span>
                       )}
@@ -210,7 +234,7 @@ export default function RegistrationForm({
                       <button
                         type="button"
                         onClick={() => remove(index)}
-                        className="text-xs text-red-600 hover:text-red-800 font-medium"
+                        className="text-xs text-red-500 hover:text-red-700 font-medium transition-colors"
                       >
                         Remove
                       </button>
@@ -221,7 +245,7 @@ export default function RegistrationForm({
                     <div>
                       <label
                         htmlFor={`participants-${index}-firstName`}
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-xs font-semibold text-park-muted uppercase tracking-wider mb-1.5"
                       >
                         First name <span className="text-red-500">*</span>
                       </label>
@@ -236,7 +260,7 @@ export default function RegistrationForm({
                     <div>
                       <label
                         htmlFor={`participants-${index}-lastName`}
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-xs font-semibold text-park-muted uppercase tracking-wider mb-1.5"
                       >
                         Last name <span className="text-red-500">*</span>
                       </label>
@@ -251,10 +275,10 @@ export default function RegistrationForm({
                     <div>
                       <label
                         htmlFor={`participants-${index}-dateOfBirth`}
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-xs font-semibold text-park-muted uppercase tracking-wider mb-1.5"
                       >
                         Date of birth{' '}
-                        <span className="text-gray-400 font-normal">(optional)</span>
+                        <span className="text-park-muted/60 font-normal normal-case tracking-normal">(optional)</span>
                       </label>
                       <input
                         id={`participants-${index}-dateOfBirth`}
@@ -264,28 +288,28 @@ export default function RegistrationForm({
                       />
                     </div>
                     {!isAdded && (
-                      <div className="flex items-center gap-2 pt-5">
+                      <div className="flex items-center gap-2.5 pt-5">
                         <input
                           id={`participants-${index}-isChild`}
                           type="checkbox"
                           {...register(`participants.${index}.isChild`)}
-                          className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-600"
+                          className="h-4 w-4 rounded border-park-border text-park-green focus:ring-park-green/20 accent-park-green"
                         />
                         <label
                           htmlFor={`participants-${index}-isChild`}
-                          className="text-sm text-gray-700"
+                          className="text-sm text-park-dark"
                         >
                           I am registering as a child
                         </label>
                       </div>
                     )}
-                    <div className={isAdded ? 'sm:col-span-2' : 'sm:col-span-2'}>
+                    <div className="sm:col-span-2">
                       <label
                         htmlFor={`participants-${index}-medicalNotes`}
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-xs font-semibold text-park-muted uppercase tracking-wider mb-1.5"
                       >
                         Medical notes{' '}
-                        <span className="text-gray-400 font-normal">(optional)</span>
+                        <span className="text-park-muted/60 font-normal normal-case tracking-normal">(optional)</span>
                       </label>
                       <textarea
                         id={`participants-${index}-medicalNotes`}
@@ -313,9 +337,10 @@ export default function RegistrationForm({
                   medicalNotes: '',
                 })
               }
-              className="mt-3 flex items-center gap-1.5 text-sm font-medium text-green-700 hover:text-green-800"
+              className="mt-4 flex items-center gap-2 text-sm font-semibold text-park-green hover:text-park-dark transition-colors"
             >
-              <span className="text-lg leading-none">+</span> Add child
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-park-lime text-park-dark text-xs font-bold">+</span>
+              Add child
             </button>
           )}
           {errors.participants?.root && (
@@ -324,88 +349,91 @@ export default function RegistrationForm({
         </section>
 
         {/* Consent */}
-        <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Consent &amp; terms</h2>
+        <section className="rounded-xl bg-park-white border border-park-border p-6 sm:p-8">
+          <SectionHeader>Consent &amp; terms</SectionHeader>
 
-          <label className="flex items-start gap-3 text-sm text-gray-700">
-            <input
-              type="checkbox"
-              {...register('consentTerms')}
-              className="mt-0.5 h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-600"
-            />
-            <span>
-              I agree to the{' '}
-              <Link href="/terms" className="text-green-700 underline">
-                Terms of Service
-              </Link>{' '}
-              <span className="text-red-500">*</span>
-            </span>
-          </label>
-          {errors.consentTerms && (
-            <FieldError message={errors.consentTerms.message} />
-          )}
+          <div className="space-y-4">
+            <label className="flex items-start gap-3 text-sm text-park-dark cursor-pointer">
+              <input
+                type="checkbox"
+                {...register('consentTerms')}
+                className="mt-0.5 h-4 w-4 rounded border-park-border accent-park-green"
+              />
+              <span>
+                I agree to the{' '}
+                <Link href="/terms" className="text-park-green underline underline-offset-2 hover:text-park-dark transition-colors">
+                  Terms of Service
+                </Link>{' '}
+                <span className="text-red-500">*</span>
+              </span>
+            </label>
+            {errors.consentTerms && (
+              <FieldError message={errors.consentTerms.message} />
+            )}
 
-          <label className="flex items-start gap-3 text-sm text-gray-700">
-            <input
-              type="checkbox"
-              {...register('consentPrivacy')}
-              className="mt-0.5 h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-600"
-            />
-            <span>
-              I accept the{' '}
-              <Link href="/privacy" className="text-green-700 underline">
-                Privacy Policy
-              </Link>{' '}
-              <span className="text-red-500">*</span>
-            </span>
-          </label>
-          {errors.consentPrivacy && (
-            <FieldError message={errors.consentPrivacy.message} />
-          )}
+            <label className="flex items-start gap-3 text-sm text-park-dark cursor-pointer">
+              <input
+                type="checkbox"
+                {...register('consentPrivacy')}
+                className="mt-0.5 h-4 w-4 rounded border-park-border accent-park-green"
+              />
+              <span>
+                I accept the{' '}
+                <Link href="/privacy" className="text-park-green underline underline-offset-2 hover:text-park-dark transition-colors">
+                  Privacy Policy
+                </Link>{' '}
+                <span className="text-red-500">*</span>
+              </span>
+            </label>
+            {errors.consentPrivacy && (
+              <FieldError message={errors.consentPrivacy.message} />
+            )}
 
-          {hasChildParticipant && (
-            <>
-              <label className="flex items-start gap-3 text-sm text-gray-700">
-                <input
-                  type="checkbox"
-                  {...register('consentChildRegistration')}
-                  className="mt-0.5 h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-600"
-                />
-                <span>
-                  I consent to register a child in my care{' '}
-                  <span className="text-red-500">*</span>
-                </span>
-              </label>
-              {errors.consentChildRegistration && (
-                <FieldError message={errors.consentChildRegistration.message} />
-              )}
-            </>
-          )}
+            {hasChildParticipant && (
+              <>
+                <label className="flex items-start gap-3 text-sm text-park-dark cursor-pointer">
+                  <input
+                    type="checkbox"
+                    {...register('consentChildRegistration')}
+                    className="mt-0.5 h-4 w-4 rounded border-park-border accent-park-green"
+                  />
+                  <span>
+                    I consent to register a child in my care{' '}
+                    <span className="text-red-500">*</span>
+                  </span>
+                </label>
+                {errors.consentChildRegistration && (
+                  <FieldError message={errors.consentChildRegistration.message} />
+                )}
+              </>
+            )}
+          </div>
         </section>
 
         {/* Server error */}
         {serverError && (
-          <div className="rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+          <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
             {serverError}
           </div>
         )}
 
-        {/* CAPTCHA Widget */}
+        {/* CAPTCHA */}
         <TurnstileWidget
           onVerify={(token) => setCaptchaToken(token)}
           onError={() => setCaptchaToken(null)}
         />
 
+        {/* Submit */}
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-md bg-green-700 px-6 py-3 text-base font-semibold text-white hover:bg-green-800 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full rounded-full bg-park-dark px-6 py-4 text-base font-semibold text-park-white hover:bg-park-green transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting
             ? 'Submitting…'
             : isWaitlist
-              ? 'Join waitlist'
-              : 'Submit registration'}
+              ? 'Join waitlist →'
+              : 'Submit registration →'}
         </button>
       </div>
     </form>

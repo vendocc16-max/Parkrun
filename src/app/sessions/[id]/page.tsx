@@ -73,131 +73,176 @@ export default async function SessionDetailPage({ params }: Props) {
   const registrationState = getRegistrationState(session, confirmedCount)
 
   return (
-    <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
-      <nav className="mb-6 text-sm text-gray-500">
-        <Link href="/sessions" className="hover:text-gray-700 transition-colors">
-          ← Back to sessions
-        </Link>
-      </nav>
+    <div className="min-h-screen bg-park-cream">
+      {/* Session hero header */}
+      <div className="bg-park-dark px-4 pt-10 pb-14">
+        <div className="mx-auto max-w-3xl">
+          <Link
+            href="/sessions"
+            className="inline-flex items-center gap-1.5 text-park-muted hover:text-park-lime transition-colors text-sm mb-6"
+          >
+            <span aria-hidden="true">←</span> All sessions
+          </Link>
 
-      {/* Session header */}
-      <div className="rounded-lg border border-gray-200 bg-white p-8 shadow-sm mb-6">
-        <div className="flex items-start justify-between gap-4 flex-wrap">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">{session.title}</h1>
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <h1 className="font-display font-extrabold text-4xl sm:text-5xl text-park-white uppercase leading-tight">
+                {session.title}
+              </h1>
+            </div>
+            <div className="flex gap-2 pt-1">
+              {session.status === 'full' ? (
+                <span className="rounded-full bg-park-muted/20 px-3 py-1 text-xs font-semibold text-park-muted uppercase tracking-wide">
+                  Full
+                </span>
+              ) : session.status === 'closed' ? (
+                <span className="rounded-full bg-park-muted/20 px-3 py-1 text-xs font-semibold text-park-muted uppercase tracking-wide">
+                  Closed
+                </span>
+              ) : (
+                <span className="rounded-full bg-park-lime/20 px-3 py-1 text-xs font-semibold text-park-lime uppercase tracking-wide">
+                  Open
+                </span>
+              )}
+              {session.status === 'full' && session.waitlist_enabled && (
+                <span className="rounded-full bg-amber-400/20 px-3 py-1 text-xs font-semibold text-amber-300 uppercase tracking-wide">
+                  Waitlist
+                </span>
+              )}
+            </div>
           </div>
-          <div className="flex gap-2">
-            {session.status === 'full' ? (
-              <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700">
-                Full
-              </span>
-            ) : session.status === 'closed' ? (
-              <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-600">
-                Closed
-              </span>
-            ) : (
-              <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
-                Open
-              </span>
-            )}
-            {session.status === 'full' && session.waitlist_enabled && (
-              <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
-                Waitlist available
-              </span>
-            )}
-          </div>
+
+          {session.description && (
+            <p className="mt-4 text-park-muted text-sm leading-relaxed max-w-xl">
+              {session.description}
+            </p>
+          )}
         </div>
-
-        {session.description && (
-          <p className="mt-4 text-gray-600 leading-relaxed">{session.description}</p>
-        )}
-
-        <dl className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-          <div>
-            <dt className="font-medium text-gray-700">Date &amp; time</dt>
-            <dd className="text-gray-500 mt-0.5">{formatDateTime(session.event_date)}</dd>
-          </div>
-          {session.location && (
-            <div>
-              <dt className="font-medium text-gray-700">Location</dt>
-              <dd className="text-gray-500 mt-0.5">📍 {session.location}</dd>
-            </div>
-          )}
-          <div>
-            <dt className="font-medium text-gray-700">Capacity</dt>
-            <dd className="text-gray-500 mt-0.5">
-              {session.status === 'full'
-                ? `${session.capacity} participants (full)`
-                : `${session.capacity} total · ${spotsLeft} spot${spotsLeft === 1 ? '' : 's'} remaining`}
-            </dd>
-          </div>
-          {session.registration_closes_at && (
-            <div>
-              <dt className="font-medium text-gray-700">Registration closes</dt>
-              <dd className="text-gray-500 mt-0.5">
-                {formatDate(session.registration_closes_at)}
-              </dd>
-            </div>
-          )}
-          {session.registration_opens_at && (
-            <div>
-              <dt className="font-medium text-gray-700">Registration opens</dt>
-              <dd className="text-gray-500 mt-0.5">
-                {formatDate(session.registration_opens_at)}
-              </dd>
-            </div>
-          )}
-        </dl>
-
-        {session.pricing_info && (
-          <div className="mt-6 border-t border-gray-100 pt-6">
-            <h2 className="font-medium text-gray-700 mb-2">Pricing</h2>
-            <p className="text-sm text-gray-500">{session.pricing_info}</p>
-          </div>
-        )}
-
-        {session.notes && (
-          <div className="mt-6 border-t border-gray-100 pt-6">
-            <h2 className="font-medium text-gray-700 mb-2">Notes</h2>
-            <p className="text-sm text-gray-500 leading-relaxed">{session.notes}</p>
-          </div>
-        )}
       </div>
 
-      {/* CTA */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        {registrationState === 'open' && (
-          <Link
-            href={`/sessions/${slug}/register`}
-            className="flex-1 rounded-md bg-green-700 px-6 py-3 text-center text-base font-semibold text-white hover:bg-green-800 transition-colors"
-          >
-            Register now
-          </Link>
-        )}
-        {registrationState === 'waitlist' && (
-          <Link
-            href={`/sessions/${slug}/register`}
-            className="flex-1 rounded-md bg-amber-600 px-6 py-3 text-center text-base font-semibold text-white hover:bg-amber-700 transition-colors"
-          >
-            Join waitlist
-          </Link>
-        )}
-        {(registrationState === 'closed' || registrationState === 'full_no_waitlist') && (
-          <div className="flex-1 rounded-md bg-gray-100 px-6 py-3 text-center text-base font-semibold text-gray-500 cursor-not-allowed">
-            Registration closed
+      {/* Main content */}
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 -mt-6 pb-16">
+        {/* Info card */}
+        <div className="rounded-xl bg-park-white border border-park-border shadow-sm overflow-hidden mb-5">
+          <dl className="divide-y divide-park-border">
+            <div className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+              <dt className="text-xs font-semibold text-park-muted uppercase tracking-wider pt-0.5">
+                Date &amp; time
+              </dt>
+              <dd className="mt-1 sm:mt-0 sm:col-span-2 text-sm font-medium text-park-dark">
+                {formatDateTime(session.event_date)}
+              </dd>
+            </div>
+
+            {session.location && (
+              <div className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+                <dt className="text-xs font-semibold text-park-muted uppercase tracking-wider pt-0.5">
+                  Location
+                </dt>
+                <dd className="mt-1 sm:mt-0 sm:col-span-2 text-sm font-medium text-park-dark">
+                  {session.location}
+                </dd>
+              </div>
+            )}
+
+            <div className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+              <dt className="text-xs font-semibold text-park-muted uppercase tracking-wider pt-0.5">
+                Availability
+              </dt>
+              <dd className="mt-1 sm:mt-0 sm:col-span-2 text-sm">
+                {session.status === 'full' ? (
+                  <span className="text-park-muted">
+                    {session.capacity} capacity · Full
+                  </span>
+                ) : (
+                  <span className="text-park-dark">
+                    <span className="font-semibold text-park-green">{spotsLeft}</span>
+                    {' '}of {session.capacity} spot{session.capacity === 1 ? '' : 's'} remaining
+                  </span>
+                )}
+              </dd>
+            </div>
+
+            {session.registration_opens_at && (
+              <div className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+                <dt className="text-xs font-semibold text-park-muted uppercase tracking-wider pt-0.5">
+                  Reg. opens
+                </dt>
+                <dd className="mt-1 sm:mt-0 sm:col-span-2 text-sm text-park-dark">
+                  {formatDate(session.registration_opens_at)}
+                </dd>
+              </div>
+            )}
+
+            {session.registration_closes_at && (
+              <div className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+                <dt className="text-xs font-semibold text-park-muted uppercase tracking-wider pt-0.5">
+                  Reg. closes
+                </dt>
+                <dd className="mt-1 sm:mt-0 sm:col-span-2 text-sm text-park-dark">
+                  {formatDate(session.registration_closes_at)}
+                </dd>
+              </div>
+            )}
+
+            {session.pricing_info && (
+              <div className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+                <dt className="text-xs font-semibold text-park-muted uppercase tracking-wider pt-0.5">
+                  Pricing
+                </dt>
+                <dd className="mt-1 sm:mt-0 sm:col-span-2 text-sm text-park-dark">
+                  {session.pricing_info}
+                </dd>
+              </div>
+            )}
+          </dl>
+        </div>
+
+        {/* Notes */}
+        {session.notes && (
+          <div className="rounded-xl bg-park-white border border-park-border p-6 mb-5">
+            <h2 className="font-display font-bold text-sm uppercase tracking-wider text-park-muted mb-3">
+              Notes
+            </h2>
+            <p className="text-sm text-park-dark leading-relaxed">{session.notes}</p>
           </div>
         )}
-        {registrationState === 'not_open_yet' && (
-          <div className="flex-1 rounded-md bg-gray-100 px-6 py-3 text-center text-base font-semibold text-gray-500 cursor-not-allowed">
-            Registration not yet open
-          </div>
-        )}
-        <Link
-          href="/sessions"
-          className="flex-1 rounded-md border border-gray-300 px-6 py-3 text-center text-base font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
-        >
-          Browse other sessions
-        </Link>
+
+        {/* CTA */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          {registrationState === 'open' && (
+            <Link
+              href={`/sessions/${slug}/register`}
+              className="flex-1 rounded-full bg-park-lime px-6 py-3.5 text-center text-base font-semibold text-park-dark hover:bg-park-green hover:text-park-white transition-colors"
+            >
+              Register now →
+            </Link>
+          )}
+          {registrationState === 'waitlist' && (
+            <Link
+              href={`/sessions/${slug}/register`}
+              className="flex-1 rounded-full bg-amber-400 px-6 py-3.5 text-center text-base font-semibold text-park-dark hover:bg-amber-500 transition-colors"
+            >
+              Join waitlist →
+            </Link>
+          )}
+          {(registrationState === 'closed' || registrationState === 'full_no_waitlist') && (
+            <div className="flex-1 rounded-full bg-park-border px-6 py-3.5 text-center text-base font-semibold text-park-muted cursor-not-allowed">
+              Registration closed
+            </div>
+          )}
+          {registrationState === 'not_open_yet' && (
+            <div className="flex-1 rounded-full bg-park-border px-6 py-3.5 text-center text-base font-semibold text-park-muted cursor-not-allowed">
+              Registration not yet open
+            </div>
+          )}
+          <Link
+            href="/sessions"
+            className="flex-1 rounded-full border border-park-border px-6 py-3.5 text-center text-base font-semibold text-park-dark hover:bg-park-white transition-colors"
+          >
+            Browse other sessions
+          </Link>
+        </div>
       </div>
     </div>
   )

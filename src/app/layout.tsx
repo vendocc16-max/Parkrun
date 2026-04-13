@@ -1,12 +1,19 @@
 import type { Metadata } from 'next'
-import { Geist } from 'next/font/google'
+import { Barlow_Condensed, DM_Sans } from 'next/font/google'
 import Link from 'next/link'
 import { SentryClientInit } from '@/lib/sentry-client'
 import './globals.css'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const barlowCondensed = Barlow_Condensed({
+  variable: '--font-barlow-condensed',
   subsets: ['latin'],
+  weight: ['500', '600', '700', '800'],
+})
+
+const dmSans = DM_Sans({
+  variable: '--font-dm-sans',
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
 })
 
 export const metadata: Metadata = {
@@ -20,22 +27,35 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-white text-gray-900">
+    <html
+      lang="en"
+      className={`${barlowCondensed.variable} ${dmSans.variable} h-full antialiased`}
+    >
+      <body className="min-h-full flex flex-col bg-park-cream text-park-dark">
         <SentryClientInit />
-        <header className="border-b border-gray-200 bg-white">
+
+        {/* Navigation */}
+        <header className="sticky top-0 z-50 bg-park-white/95 backdrop-blur-sm border-b border-park-border">
           <nav className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
-            <Link href="/" className="flex items-center gap-2 font-bold text-lg text-green-700">
-              <span className="text-2xl">🏃</span>
-              <span>Parkrun</span>
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-park-green text-park-lime font-display font-bold text-sm tracking-tight">
+                P
+              </span>
+              <span className="font-display font-bold text-xl uppercase tracking-wide text-park-dark">
+                Parkrun
+              </span>
             </Link>
-            <div className="flex items-center gap-6 text-sm font-medium">
-              <Link href="/sessions" className="text-gray-600 hover:text-gray-900 transition-colors">
+
+            <div className="flex items-center gap-5 text-sm font-medium">
+              <Link
+                href="/sessions"
+                className="text-park-muted hover:text-park-dark transition-colors"
+              >
                 Sessions
               </Link>
               <Link
                 href="/admin"
-                className="rounded-md bg-green-700 px-4 py-2 text-white hover:bg-green-800 transition-colors"
+                className="rounded-full bg-park-dark px-5 py-2 text-park-white text-sm font-semibold hover:bg-park-green transition-colors"
               >
                 Organiser login
               </Link>
@@ -45,14 +65,17 @@ export default function RootLayout({
 
         <main className="flex-1">{children}</main>
 
-        <footer className="border-t border-gray-200 bg-gray-50">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 text-sm text-gray-500 flex flex-col sm:flex-row justify-between gap-4">
-            <p>© {new Date().getFullYear()} Parkrun Registration. All rights reserved.</p>
-            <div className="flex gap-6">
-              <Link href="/privacy" className="hover:text-gray-700 transition-colors">
+        {/* Footer */}
+        <footer className="border-t border-park-border bg-park-white">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <p className="font-display text-sm uppercase tracking-widest text-park-muted">
+              © {new Date().getFullYear()} Parkrun Registration
+            </p>
+            <div className="flex gap-6 text-sm text-park-muted">
+              <Link href="/privacy" className="hover:text-park-dark transition-colors">
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="hover:text-gray-700 transition-colors">
+              <Link href="/terms" className="hover:text-park-dark transition-colors">
                 Terms of Service
               </Link>
             </div>
