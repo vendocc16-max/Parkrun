@@ -46,12 +46,12 @@ export async function POST(request: Request) {
     captchaToken,
   } = parsed.data
 
-  // 2. Get client IP and email
+  // 2. Get client IP
   const headersList = await headers()
   const forwardedFor = headersList.get('x-forwarded-for')
   const clientIP = forwardedFor?.split(',')[0]?.trim() ?? 'unknown'
 
-  // 3. Check rate limit early
+  // 3. Check rate limit early (before session lookup)
   const rateLimitResult = await checkRateLimit(clientIP, guardian.email, sessionId)
   if (!rateLimitResult.allowed) {
     const retryAfter = rateLimitResult.retryAfter ?? 60
@@ -223,7 +223,6 @@ export async function POST(request: Request) {
       })
       waitlistPosition = (wpData as number | null) ?? 1
     } else {
-      // Shouldn't reach here given the earlier check, but handle gracefully
       regStatus = 'waitlisted'
       anyWaitlisted = true
     }

@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { registrationSchema } from '@/lib/validations/registration'
 import { REGISTRATION } from '@/lib/config/rules'
+import TurnstileWidget from '@/components/TurnstileWidget'
 
 interface Props {
   sessionId: string
@@ -49,6 +50,7 @@ export default function RegistrationForm({
   const router = useRouter()
   const [serverError, setServerError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -61,6 +63,7 @@ export default function RegistrationForm({
       consentTerms: false,
       consentPrivacy: false,
       consentChildRegistration: false,
+      captchaToken: '',
     },
   })
 
@@ -80,7 +83,7 @@ export default function RegistrationForm({
       const res = await fetch('/api/registrations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, captchaToken }),
       })
       const json = await res.json()
       if (!res.ok) {
@@ -116,7 +119,7 @@ export default function RegistrationForm({
         <section>
           <h2 className="text-lg font-semibold text-gray-900 mb-1">Your contact details</h2>
           <p className="text-sm text-gray-500 mb-4">
-            We'll send your confirmation to the email address below.
+            We&apos;ll send your confirmation to the email address below.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -386,6 +389,12 @@ export default function RegistrationForm({
             {serverError}
           </div>
         )}
+
+        {/* CAPTCHA Widget */}
+        <TurnstileWidget
+          onVerify={(token) => setCaptchaToken(token)}
+          onError={() => setCaptchaToken(null)}
+        />
 
         <button
           type="submit"

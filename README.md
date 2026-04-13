@@ -20,17 +20,75 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+## Environment Setup for Wave 3 Hardening
 
-To learn more about Next.js, take a look at the following resources:
+This project uses a centralized environment validation system with Zod to ensure all required services are properly configured.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Required Environment Variables
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Copy `.env.local.example` to `.env.local` and fill in the following services:
 
-## Deploy on Vercel
+#### Core Services
+- **Supabase** (PostgreSQL & Auth)
+  - `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase project URL
+  - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Supabase public anon key
+  - `SUPABASE_SERVICE_ROLE_KEY`: Supabase service role key (server-side only)
+  - [Setup Guide](https://supabase.com/docs/guides/getting-started/quickstarts/nextjs)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Resend** (Email Service)
+  - `RESEND_API_KEY`: Your Resend API key
+  - `RESEND_FROM_EMAIL`: Sender email address
+  - [Setup Guide](https://resend.com/docs/send-with-nextjs)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+#### Rate Limiting & Security
+- **Upstash Redis** (Rate Limiting)
+  - `UPSTASH_REDIS_REST_URL`: Your Upstash Redis REST URL
+  - `UPSTASH_REDIS_REST_TOKEN`: Your Upstash Redis token
+  - [Setup Guide](https://upstash.com/docs/redis/features/rest-api)
+
+- **Turnstile** (CAPTCHA)
+  - `NEXT_PUBLIC_TURNSTILE_SITE_KEY`: Cloudflare Turnstile site key
+  - `TURNSTILE_SECRET_KEY`: Cloudflare Turnstile secret key
+  - [Setup Guide](https://developers.cloudflare.com/turnstile/)
+
+#### Monitoring & Observability
+- **Sentry** (Error Tracking)
+  - `NEXT_PUBLIC_SENTRY_DSN`: Your Sentry DSN
+  - `SENTRY_ENVIRONMENT`: Environment (development, staging, production)
+  - `SENTRY_AUTH_TOKEN`: Sentry authentication token (for source maps upload)
+  - [Setup Guide](https://docs.sentry.io/platforms/javascript/guides/nextjs/)
+
+#### Feature Flags
+- `RATE_LIMIT_ENABLED`: Enable rate limiting (true/false)
+- `CAPTCHA_ENABLED`: Enable CAPTCHA verification (true/false)
+- `SENTRY_ENABLED`: Enable Sentry error tracking (true/false)
+
+### Environment Validation
+
+The application validates all environment variables at runtime using Zod schema defined in `src/lib/env.ts`. 
+
+- **Development**: Missing optional variables trigger warnings in console
+- **Production**: Missing required variables cause the build to fail
+
+To validate manually:
+```bash
+npm run build
+```
+
+### Development Setup
+
+1. Copy environment template:
+```bash
+cp .env.local.example .env.local
+```
+
+2. Fill in placeholder values with your service credentials
+
+3. Run development server:
+```bash
+npm run dev
+```
+
+The app will warn about missing optional services, but will run with rate limiting, CAPTCHA, and Sentry disabled.
+
+

@@ -32,6 +32,7 @@ export const registrationSchema = z.object({
     .boolean()
     .refine((val) => val === true, 'You must accept the privacy policy'),
   consentChildRegistration: z.boolean().optional(),
+  captchaToken: z.string().optional(),
 })
 
 export type RegistrationInput = z.infer<typeof registrationSchema>
