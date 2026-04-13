@@ -208,6 +208,41 @@ export default async function SessionDetailPage({ params }: Props) {
           </div>
         )}
 
+        {/* Status banners */}
+        {registrationState === 'not_open_yet' && session.registration_opens_at && (
+          <div className="rounded-xl bg-amber-50 border border-amber-200 px-5 py-4 mb-3 flex items-start gap-3">
+            <span className="text-amber-500 text-lg leading-none mt-0.5">⏳</span>
+            <div>
+              <p className="text-sm font-semibold text-amber-800">Registration not open yet</p>
+              <p className="text-sm text-amber-700 mt-0.5">
+                Registration opens on {formatDate(session.registration_opens_at)}
+              </p>
+            </div>
+          </div>
+        )}
+        {(registrationState === 'closed') && (
+          <div className="rounded-xl bg-gray-50 border border-park-border px-5 py-4 mb-3 flex items-start gap-3">
+            <span className="text-park-muted text-lg leading-none mt-0.5">🔒</span>
+            <div>
+              <p className="text-sm font-semibold text-park-dark">Registration is closed</p>
+              <p className="text-sm text-park-muted mt-0.5">
+                This session is no longer accepting registrations.
+              </p>
+            </div>
+          </div>
+        )}
+        {registrationState === 'full_no_waitlist' && (
+          <div className="rounded-xl bg-red-50 border border-red-200 px-5 py-4 mb-3 flex items-start gap-3">
+            <span className="text-red-400 text-lg leading-none mt-0.5">🚫</span>
+            <div>
+              <p className="text-sm font-semibold text-red-800">Session is full</p>
+              <p className="text-sm text-red-700 mt-0.5">
+                All spots are taken and there is no waitlist for this session.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* CTA */}
         <div className="flex flex-col sm:flex-row gap-3">
           {registrationState === 'open' && (
