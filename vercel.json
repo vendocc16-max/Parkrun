@@ -1,12 +1,1 @@
-{
-  "crons": [
-    {
-      "path": "/api/cron/cleanup-stale-registrations",
-      "schedule": "0 2 * * *"
-    },
-    {
-      "path": "/api/cron/promote-waitlist",
-      "schedule": "*/15 * * * *"
-    }
-  ]
-}
+{}
