@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Geist } from 'next/font/google'
 import Link from 'next/link'
+import { SentryClientInit } from '@/lib/sentry-client'
 import './globals.css'
 
 const geistSans = Geist({
@@ -21,6 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-white text-gray-900">
+        <SentryClientInit />
         <header className="border-b border-gray-200 bg-white">
           <nav className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
             <Link href="/" className="flex items-center gap-2 font-bold text-lg text-green-700">

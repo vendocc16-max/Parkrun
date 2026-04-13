@@ -4,6 +4,7 @@ import { confirmationTemplate } from './templates/confirmation'
 import { waitlistPromotionTemplate } from './templates/waitlist-promotion'
 import { reminderTemplate } from './templates/reminder'
 import { cancellationTemplate } from './templates/cancellation'
+import { captureException, addBreadcrumb } from '../sentry'
 import type {
   Participant,
   Registration,
@@ -103,6 +104,17 @@ export async function sendConfirmationEmail(params: {
       if (outboundMessageId) {
         await updateOutboundMessageStatus(outboundMessageId, 'failed')
       }
+      addBreadcrumb('Confirmation email send failed', {
+        to,
+        messageId: outboundMessageId,
+        sessionId: session.id,
+      }, 'email')
+      captureException(new Error(`Email send failed: ${emailError.message}`), {
+        context: 'confirmation_email',
+        to,
+        sessionId: session.id,
+        errorMessage: emailError.message,
+      })
       return { success: false, error: emailError.message }
     }
 
@@ -122,9 +134,21 @@ export async function sendConfirmationEmail(params: {
       }
     }
 
+    addBreadcrumb('Confirmation email sent successfully', {
+      to,
+      sessionId: session.id,
+      messageId: resendMessageId,
+    }, 'email')
+
     return { success: true, messageId: resendMessageId ?? undefined }
   } catch (err) {
-    return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
+    const error = err instanceof Error ? err : new Error(String(err))
+    captureException(error, {
+      context: 'sendConfirmationEmail',
+      to: params.to,
+      sessionId: params.session.id,
+    })
+    return { success: false, error: error.message }
   }
 }
 
@@ -170,6 +194,18 @@ export async function sendWaitlistPromotionEmail(params: {
       if (outboundMessageId) {
         await updateOutboundMessageStatus(outboundMessageId, 'failed')
       }
+      addBreadcrumb('Waitlist promotion email send failed', {
+        to,
+        messageId: outboundMessageId,
+        sessionId: session.id,
+      }, 'email')
+      captureException(new Error(`Waitlist email send failed: ${emailError.message}`), {
+        context: 'waitlist_promotion_email',
+        to,
+        sessionId: session.id,
+        registrationId: registration.id,
+        errorMessage: emailError.message,
+      })
       return { success: false, error: emailError.message }
     }
 
@@ -187,9 +223,22 @@ export async function sendWaitlistPromotionEmail(params: {
       })
     }
 
+    addBreadcrumb('Waitlist promotion email sent successfully', {
+      to,
+      sessionId: session.id,
+      registrationId: registration.id,
+    }, 'email')
+
     return { success: true, messageId: resendMessageId ?? undefined }
   } catch (err) {
-    return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
+    const error = err instanceof Error ? err : new Error(String(err))
+    captureException(error, {
+      context: 'sendWaitlistPromotionEmail',
+      to: params.to,
+      sessionId: params.session.id,
+      registrationId: params.registration.id,
+    })
+    return { success: false, error: error.message }
   }
 }
 
@@ -235,6 +284,18 @@ export async function sendCancellationEmail(params: {
       if (outboundMessageId) {
         await updateOutboundMessageStatus(outboundMessageId, 'failed')
       }
+      addBreadcrumb('Cancellation email send failed', {
+        to,
+        messageId: outboundMessageId,
+        sessionId: session.id,
+      }, 'email')
+      captureException(new Error(`Cancellation email send failed: ${emailError.message}`), {
+        context: 'cancellation_email',
+        to,
+        sessionId: session.id,
+        registrationId: registration.id,
+        errorMessage: emailError.message,
+      })
       return { success: false, error: emailError.message }
     }
 
@@ -252,9 +313,22 @@ export async function sendCancellationEmail(params: {
       })
     }
 
+    addBreadcrumb('Cancellation email sent successfully', {
+      to,
+      sessionId: session.id,
+      registrationId: registration.id,
+    }, 'email')
+
     return { success: true, messageId: resendMessageId ?? undefined }
   } catch (err) {
-    return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
+    const error = err instanceof Error ? err : new Error(String(err))
+    captureException(error, {
+      context: 'sendCancellationEmail',
+      to: params.to,
+      sessionId: params.session.id,
+      registrationId: params.registration.id,
+    })
+    return { success: false, error: error.message }
   }
 }
 
@@ -288,6 +362,16 @@ export async function sendBulkReminder(params: {
       })
 
       if (emailError) {
+        addBreadcrumb('Bulk reminder email send failed', {
+          to: recipient.email,
+          sessionId: session.id,
+        }, 'email')
+        captureException(new Error(`Bulk reminder failed: ${emailError.message}`), {
+          context: 'bulk_reminder_email',
+          to: recipient.email,
+          sessionId: session.id,
+          errorMessage: emailError.message,
+        })
         results.push({ email: recipient.email, success: false })
       } else {
         results.push({
@@ -296,13 +380,26 @@ export async function sendBulkReminder(params: {
           messageId: emailData?.id ?? undefined,
         })
       }
-    } catch {
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error(String(err))
+      captureException(error, {
+        context: 'bulk_reminder_email_exception',
+        to: recipient.email,
+        sessionId: session.id,
+      })
       results.push({ email: recipient.email, success: false })
     }
   }
 
   const sent = results.filter((r) => r.success).length
   const failed = results.filter((r) => !r.success).length
+
+  addBreadcrumb('Bulk reminder send completed', {
+    sessionId: session.id,
+    total: recipients.length,
+    sent,
+    failed,
+  }, 'email')
 
   return { sent, failed, results }
 }

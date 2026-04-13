@@ -1,7 +1,8 @@
 import { headers } from 'next/headers'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { registrationSchema } from '@/lib/validations/registration'
-import { RATE_LIMIT } from '@/lib/config/rules'
+import { checkRateLimit } from '@/lib/rate-limit'
+import { verifyCaptcha } from '@/lib/captcha'
 import { sendConfirmationEmail } from '@/lib/email/sendConfirmation'
 import type {
   Session,
@@ -13,7 +14,6 @@ import type {
   InsertParticipant,
   InsertRegistration,
   InsertConsent,
-  InsertRateLimitEvent,
 } from '../../../../supabase/types'
 
 export async function POST(request: Request) {
@@ -43,16 +43,54 @@ export async function POST(request: Request) {
     consentTerms,
     consentPrivacy,
     consentChildRegistration,
+    captchaToken,
   } = parsed.data
 
-  // 2. Get client IP
+  // 2. Get client IP and email
   const headersList = await headers()
   const forwardedFor = headersList.get('x-forwarded-for')
   const clientIP = forwardedFor?.split(',')[0]?.trim() ?? 'unknown'
 
+  // 3. Check rate limit early
+  const rateLimitResult = await checkRateLimit(clientIP, guardian.email, sessionId)
+  if (!rateLimitResult.allowed) {
+    const retryAfter = rateLimitResult.retryAfter ?? 60
+    return Response.json(
+      {
+        error: `Too many registration attempts. Please try again in ${retryAfter} seconds.`,
+        code: 'RATE_LIMITED',
+      },
+      {
+        status: 429,
+        headers: {
+          'Retry-After': String(retryAfter),
+        },
+      },
+    )
+  }
+
+  // 3.5. CAPTCHA verification
+  const isCaptchaEnabled = process.env.CAPTCHA_ENABLED === 'true'
+  if (isCaptchaEnabled) {
+    if (!captchaToken) {
+      return Response.json(
+        { error: 'CAPTCHA verification required.', code: 'CAPTCHA_REQUIRED' },
+        { status: 400 },
+      )
+    }
+
+    const captchaResult = await verifyCaptcha(captchaToken)
+    if (!captchaResult.success) {
+      return Response.json(
+        { error: 'CAPTCHA verification failed. Please try again.', code: 'CAPTCHA_FAILED' },
+        { status: 400 },
+      )
+    }
+  }
+
   const adminClient = createAdminClient()
 
-  // 3. Look up session
+  // 4. Look up session
   const { data: sessionData, error: sessionError } = await adminClient
     .from('sessions')
     .select('*')
@@ -65,33 +103,6 @@ export async function POST(request: Request) {
     return Response.json(
       { error: 'Session not found or unavailable', code: 'SESSION_NOT_FOUND' },
       { status: 404 },
-    )
-  }
-
-  // 4. Rate limiting — check previous attempts first
-  const windowStart = new Date(
-    Date.now() - RATE_LIMIT.REGISTRATION_ATTEMPTS_WINDOW_MINUTES * 60 * 1000,
-  ).toISOString()
-
-  const { count: attemptCount } = await adminClient
-    .from('rate_limit_events')
-    .select('*', { count: 'exact', head: true })
-    .eq('ip_address', clientIP)
-    .eq('session_id', sessionId)
-    .eq('event_type', 'registration_attempt')
-    .gte('created_at', windowStart)
-
-  // Record the attempt regardless (even if blocked)
-  await adminClient.from('rate_limit_events').insert({
-    ip_address: clientIP,
-    session_id: sessionId,
-    event_type: 'registration_attempt',
-  } as InsertRateLimitEvent)
-
-  if ((attemptCount ?? 0) >= RATE_LIMIT.REGISTRATION_ATTEMPTS_PER_IP_PER_SESSION) {
-    return Response.json(
-      { error: 'Too many registration attempts. Please try again later.', code: 'RATE_LIMITED' },
-      { status: 429 },
     )
   }
 
