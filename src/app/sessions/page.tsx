@@ -3,8 +3,8 @@ import { createClient } from '@/lib/supabase/server'
 import type { Session } from '../../../supabase/types'
 
 export const metadata = {
-  title: 'Sessions | Parkrun Registration',
-  description: 'Browse upcoming Parkrun sessions and secure your spot',
+  title: 'Evenemang | Parkrun Anmälan',
+  description: 'Bläddra bland kommande Parkrun-evenemang och säkra din plats',
 }
 
 function formatDate(dateStr: string) {
@@ -53,13 +53,13 @@ export default async function SessionsPage() {
       <div className="bg-park-dark py-14 px-4">
         <div className="mx-auto max-w-5xl">
           <p className="font-display text-park-lime uppercase tracking-[0.2em] text-xs font-semibold mb-3">
-            Register today
+            Anmäl dig idag
           </p>
           <h1 className="font-display font-extrabold text-4xl sm:text-5xl text-park-white uppercase leading-tight">
-            Upcoming sessions
+            Kommande evenemang
           </h1>
           <p className="mt-3 text-park-muted text-sm max-w-md">
-            Browse available Parkrun events and register your group.
+            Bläddra bland tillgängliga Parkrun-evenemang och anmäl din grupp.
           </p>
         </div>
       </div>
@@ -72,10 +72,10 @@ export default async function SessionsPage() {
               <span className="text-3xl">🏃</span>
             </div>
             <p className="font-display font-bold text-lg uppercase text-park-dark mb-2">
-              No sessions yet
+              Inga evenemang ännu
             </p>
             <p className="text-sm text-park-muted">
-              Check back soon — new sessions are added regularly.
+              Kom tillbaka snart — nya evenemang läggs till regelbundet.
             </p>
           </div>
         ) : (
@@ -104,11 +104,11 @@ export default async function SessionsPage() {
                       </h2>
                       {isFull ? (
                         <span className="rounded-full bg-park-muted/15 px-2.5 py-0.5 text-xs font-semibold text-park-muted uppercase tracking-wide">
-                          Full
+                          Fullbokad
                         </span>
                       ) : (
                         <span className="rounded-full bg-park-lime/20 px-2.5 py-0.5 text-xs font-semibold text-park-green uppercase tracking-wide">
-                          Open
+                          Öppen
                         </span>
                       )}
                     </div>
@@ -131,8 +131,8 @@ export default async function SessionsPage() {
                       )}
                       <span className={`font-medium ${isFull ? 'text-park-muted' : 'text-park-green'}`}>
                         {isFull
-                          ? (session.waitlist_enabled ? 'Waitlist available' : 'No spots remaining')
-                          : `${spotsLeft} spot${spotsLeft === 1 ? '' : 's'} left`}
+                          ? (session.waitlist_enabled ? 'Väntelista tillgänglig' : 'Inga platser kvar')
+                          : `${spotsLeft} plats${spotsLeft === 1 ? '' : 'er'} kvar`}
                       </span>
                     </div>
                   </div>
@@ -146,7 +146,7 @@ export default async function SessionsPage() {
                           : 'bg-park-dark text-park-white hover:bg-park-green'
                       }`}
                     >
-                      {isFull ? 'Join waitlist' : 'View & register'}
+                      {isFull ? 'Gå med i väntelista' : 'Visa & anmäl'}
                       <span aria-hidden="true">→</span>
                     </Link>
                   </div>

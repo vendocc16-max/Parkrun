@@ -51,6 +51,7 @@ function SectionHeader({ children, sub }: { children: React.ReactNode; sub?: str
       </h2>
       {sub && <p className="mt-1 text-sm text-park-muted">{sub}</p>}
     </div>
+
   )
 }
 
@@ -129,8 +130,8 @@ export default function RegistrationForm({
       <div className="space-y-4">
         {/* Contact details */}
         <section className="rounded-xl bg-park-white border border-park-border p-6 sm:p-8">
-          <SectionHeader sub="We'll send your confirmation to the email address below.">
-            Your contact details
+          <SectionHeader sub="Vi skickar din bekräftelse till e-postadressen nedan.">
+            Dina kontaktuppgifter
           </SectionHeader>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -138,7 +139,7 @@ export default function RegistrationForm({
                 htmlFor="guardian-first-name"
                 className="block text-xs font-semibold text-park-muted uppercase tracking-wider mb-1.5"
               >
-                First name <span className="text-red-500">*</span>
+                Förnamn <span className="text-red-500">*</span>
               </label>
               <input
                 id="guardian-first-name"
@@ -154,7 +155,7 @@ export default function RegistrationForm({
                 htmlFor="guardian-last-name"
                 className="block text-xs font-semibold text-park-muted uppercase tracking-wider mb-1.5"
               >
-                Last name <span className="text-red-500">*</span>
+                Efternamn <span className="text-red-500">*</span>
               </label>
               <input
                 id="guardian-last-name"
@@ -170,7 +171,7 @@ export default function RegistrationForm({
                 htmlFor="guardian-email"
                 className="block text-xs font-semibold text-park-muted uppercase tracking-wider mb-1.5"
               >
-                Email address <span className="text-red-500">*</span>
+                E-postadress <span className="text-red-500">*</span>
               </label>
               <input
                 id="guardian-email"
@@ -186,8 +187,8 @@ export default function RegistrationForm({
                 htmlFor="guardian-phone"
                 className="block text-xs font-semibold text-park-muted uppercase tracking-wider mb-1.5"
               >
-                Phone{' '}
-                <span className="text-park-muted/60 font-normal normal-case tracking-normal">(optional)</span>
+                Telefon{' '}
+                <span className="text-park-muted/60 font-normal normal-case tracking-normal">(valfritt)</span>
               </label>
               <input
                 id="guardian-phone"
@@ -205,9 +206,9 @@ export default function RegistrationForm({
         {/* Participants */}
         <section className="rounded-xl bg-park-white border border-park-border p-6 sm:p-8">
           <SectionHeader
-            sub={`Register yourself and up to ${REGISTRATION.MAX_PARTICIPANTS_PER_SUBMISSION - 1} children in your care.`}
+            sub={`Anmäl dig själv och upp till ${REGISTRATION.MAX_PARTICIPANTS_PER_SUBMISSION - 1} barn i ditt sällskap.`}
           >
-            Participants
+            Deltagare
           </SectionHeader>
 
           <div className="space-y-3">
@@ -222,11 +223,11 @@ export default function RegistrationForm({
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
                       <span className="font-display font-bold text-sm uppercase text-park-dark">
-                        {index === 0 ? 'You (participant 1)' : `Child ${index}`}
+                        {index === 0 ? 'Du (deltagare 1)' : `Barn ${index}`}
                       </span>
                       {isAdded && (
                         <span className="rounded-full bg-park-green/10 px-2 py-0.5 text-xs font-semibold text-park-green uppercase tracking-wide">
-                          Child
+                          Barn
                         </span>
                       )}
                     </div>
@@ -236,7 +237,7 @@ export default function RegistrationForm({
                         onClick={() => remove(index)}
                         className="text-xs text-red-500 hover:text-red-700 font-medium transition-colors"
                       >
-                        Remove
+                        Ta bort
                       </button>
                     )}
                   </div>
@@ -247,7 +248,7 @@ export default function RegistrationForm({
                         htmlFor={`participants-${index}-firstName`}
                         className="block text-xs font-semibold text-park-muted uppercase tracking-wider mb-1.5"
                       >
-                        First name <span className="text-red-500">*</span>
+                        Förnamn <span className="text-red-500">*</span>
                       </label>
                       <input
                         id={`participants-${index}-firstName`}
@@ -262,7 +263,7 @@ export default function RegistrationForm({
                         htmlFor={`participants-${index}-lastName`}
                         className="block text-xs font-semibold text-park-muted uppercase tracking-wider mb-1.5"
                       >
-                        Last name <span className="text-red-500">*</span>
+                        Efternamn <span className="text-red-500">*</span>
                       </label>
                       <input
                         id={`participants-${index}-lastName`}
@@ -277,8 +278,8 @@ export default function RegistrationForm({
                         htmlFor={`participants-${index}-dateOfBirth`}
                         className="block text-xs font-semibold text-park-muted uppercase tracking-wider mb-1.5"
                       >
-                        Date of birth{' '}
-                        <span className="text-park-muted/60 font-normal normal-case tracking-normal">(optional)</span>
+                        Födelsedatum{' '}
+                        <span className="text-park-muted/60 font-normal normal-case tracking-normal">(valfritt)</span>
                       </label>
                       <input
                         id={`participants-${index}-dateOfBirth`}
@@ -299,7 +300,7 @@ export default function RegistrationForm({
                           htmlFor={`participants-${index}-isChild`}
                           className="text-sm text-park-dark"
                         >
-                          I am registering as a child
+                          Jag anmäler mig som barn
                         </label>
                       </div>
                     )}
@@ -308,13 +309,13 @@ export default function RegistrationForm({
                         htmlFor={`participants-${index}-medicalNotes`}
                         className="block text-xs font-semibold text-park-muted uppercase tracking-wider mb-1.5"
                       >
-                        Medical notes{' '}
-                        <span className="text-park-muted/60 font-normal normal-case tracking-normal">(optional)</span>
+                        Medicinska uppgifter{' '}
+                        <span className="text-park-muted/60 font-normal normal-case tracking-normal">(valfritt)</span>
                       </label>
                       <textarea
                         id={`participants-${index}-medicalNotes`}
                         rows={2}
-                        placeholder="Any conditions, allergies, or requirements we should know about"
+                        placeholder="Tillstånd, allergier eller krav vi bör känna till"
                         {...register(`participants.${index}.medicalNotes`)}
                         className={`${inputClass(!!pErrors?.medicalNotes)} resize-none`}
                       />
@@ -340,7 +341,7 @@ export default function RegistrationForm({
               className="mt-4 flex items-center gap-2 text-sm font-semibold text-park-green hover:text-park-dark transition-colors"
             >
               <span className="flex h-5 w-5 items-center justify-center rounded-full bg-park-lime text-park-dark text-xs font-bold">+</span>
-              Add child
+              Lägg till barn
             </button>
           )}
           {errors.participants?.root && (
@@ -350,7 +351,7 @@ export default function RegistrationForm({
 
         {/* Consent */}
         <section className="rounded-xl bg-park-white border border-park-border p-6 sm:p-8">
-          <SectionHeader>Consent &amp; terms</SectionHeader>
+          <SectionHeader>Samtycke &amp; villkor</SectionHeader>
 
           <div className="space-y-4">
             <label className="flex items-start gap-3 text-sm text-park-dark cursor-pointer">
@@ -360,9 +361,9 @@ export default function RegistrationForm({
                 className="mt-0.5 h-4 w-4 rounded border-park-border accent-park-green"
               />
               <span>
-                I agree to the{' '}
+                Jag godkänner{' '}
                 <Link href="/terms" className="text-park-green underline underline-offset-2 hover:text-park-dark transition-colors">
-                  Terms of Service
+                  användarvillkoren
                 </Link>{' '}
                 <span className="text-red-500">*</span>
               </span>
@@ -378,9 +379,9 @@ export default function RegistrationForm({
                 className="mt-0.5 h-4 w-4 rounded border-park-border accent-park-green"
               />
               <span>
-                I accept the{' '}
+                Jag godkänner{' '}
                 <Link href="/privacy" className="text-park-green underline underline-offset-2 hover:text-park-dark transition-colors">
-                  Privacy Policy
+                  integritetspolicyn
                 </Link>{' '}
                 <span className="text-red-500">*</span>
               </span>
@@ -398,7 +399,7 @@ export default function RegistrationForm({
                     className="mt-0.5 h-4 w-4 rounded border-park-border accent-park-green"
                   />
                   <span>
-                    I consent to register a child in my care{' '}
+                    Jag samtycker till att anmäla ett barn i mitt sällskap{' '}
                     <span className="text-red-500">*</span>
                   </span>
                 </label>
@@ -432,8 +433,8 @@ export default function RegistrationForm({
           {isSubmitting
             ? 'Submitting…'
             : isWaitlist
-              ? 'Join waitlist →'
-              : 'Submit registration →'}
+              ? 'Gå med i väntelista →'
+              : 'Skicka anmälan →'}
         </button>
       </div>
     </form>

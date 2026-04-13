@@ -13,7 +13,6 @@ export default function Home() {
           <div className="absolute -right-32 top-1/2 -translate-y-1/2 h-[640px] w-[640px] rounded-full border border-park-green/25" />
           <div className="absolute -right-12 top-1/2 -translate-y-1/2 h-[440px] w-[440px] rounded-full border border-park-green/15" />
           <div className="absolute right-24 top-1/2 -translate-y-1/2 h-[220px] w-[220px] rounded-full border border-park-lime/20" />
-          {/* Lime accent dot cluster */}
           <div className="absolute bottom-12 right-40 h-2 w-2 rounded-full bg-park-lime/40" />
           <div className="absolute bottom-20 right-56 h-1.5 w-1.5 rounded-full bg-park-lime/30" />
           <div className="absolute top-16 right-32 h-2.5 w-2.5 rounded-full bg-park-lime/25" />
@@ -22,29 +21,29 @@ export default function Home() {
         <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
           <div className="max-w-2xl">
             <p className="font-display text-park-lime uppercase tracking-[0.25em] text-sm font-semibold mb-5">
-              Free · Weekly · For everyone
+              Gratis · Varje vecka · För alla
             </p>
             <h1 className="font-display font-extrabold text-park-white uppercase leading-[0.9] tracking-tight">
-              <span className="block text-6xl sm:text-7xl lg:text-8xl">Your next</span>
+              <span className="block text-6xl sm:text-7xl lg:text-8xl">Ditt nästa</span>
               <span className="block text-6xl sm:text-7xl lg:text-8xl text-park-lime">parkrun</span>
-              <span className="block text-6xl sm:text-7xl lg:text-8xl">starts here</span>
+              <span className="block text-6xl sm:text-7xl lg:text-8xl">börjar här</span>
             </h1>
             <p className="mt-8 text-base sm:text-lg text-park-muted leading-relaxed max-w-lg">
-              Browse upcoming sessions, secure your spot, and bring the whole family.
-              Free, friendly, and open to everyone — just show up and run.
+              Bläddra bland kommande evenemang, säkra din plats och ta med hela familjen.
+              Gratis, välkomnande och öppet för alla — bara dyka upp och springa.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row gap-3">
               <Link
                 href="/sessions"
                 className="inline-flex items-center justify-center rounded-full bg-park-lime px-8 py-3.5 text-park-dark font-semibold text-base hover:bg-white transition-colors"
               >
-                View sessions →
+                Visa evenemang →
               </Link>
               <a
                 href="#how-it-works"
                 className="inline-flex items-center justify-center rounded-full border border-white/20 px-8 py-3.5 text-park-white font-semibold text-base hover:bg-white/10 transition-colors"
               >
-                How it works
+                Hur det fungerar
               </a>
             </div>
           </div>
@@ -55,9 +54,9 @@ export default function Home() {
       <section className="bg-park-green py-5 px-4">
         <div className="mx-auto max-w-6xl flex flex-wrap justify-center gap-x-12 gap-y-2 text-center">
           {[
-            { value: '5km', label: 'Every session' },
-            { value: '100%', label: 'Free to join' },
-            { value: 'All ages', label: 'Welcome' },
+            { value: '5 km', label: 'Varje gång' },
+            { value: '100%', label: 'Gratis' },
+            { value: 'Alla åldrar', label: 'Välkomna' },
           ].map(({ value, label }) => (
             <div key={label} className="flex items-center gap-2.5">
               <span className="font-display font-bold text-park-lime text-2xl uppercase">{value}</span>
@@ -72,10 +71,10 @@ export default function Home() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-14">
             <p className="font-display text-park-green uppercase tracking-[0.2em] text-sm font-semibold mb-3">
-              Simple process
+              Enkelt att komma igång
             </p>
             <h2 className="font-display font-bold text-4xl sm:text-5xl text-park-dark uppercase leading-tight">
-              How it works
+              Hur det fungerar
             </h2>
           </div>
 
@@ -83,21 +82,21 @@ export default function Home() {
             {[
               {
                 step: '01',
-                title: 'Find a session',
+                title: 'Hitta ett evenemang',
                 description:
-                  'Browse upcoming Parkrun events and pick a date that suits your schedule.',
+                  'Bläddra bland kommande Parkrun-evenemang och välj ett datum som passar dig.',
               },
               {
                 step: '02',
-                title: 'Register your group',
+                title: 'Anmäl din grupp',
                 description:
-                  'Fill in your details and add up to 5 participants — adults and children welcome.',
+                  'Fyll i dina uppgifter och lägg till upp till 5 deltagare — vuxna och barn välkomna.',
               },
               {
                 step: '03',
-                title: 'Show up and run',
+                title: 'Dyka upp och spring',
                 description:
-                  "Get a confirmation email with everything you need. Just show up on the day!",
+                  'Få en bekräftelse via e-post med allt du behöver. Bara dyka upp på dagen!',
               },
             ].map(({ step, title, description }) => (
               <div key={step} className="group">
@@ -122,17 +121,17 @@ export default function Home() {
         <div className="mx-auto max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
             <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-park-dark uppercase leading-tight">
-              Ready to run?
+              Redo att springa?
             </h2>
             <p className="text-park-dark/60 mt-1 text-sm">
-              Spots fill up fast — register early.
+              Platserna tar slut snabbt — anmäl dig tidigt.
             </p>
           </div>
           <Link
             href="/sessions"
             className="shrink-0 rounded-full bg-park-dark px-8 py-3.5 text-park-white font-semibold text-base hover:bg-park-green transition-colors"
           >
-            Browse sessions →
+            Visa evenemang →
           </Link>
         </div>
       </section>
@@ -141,16 +140,16 @@ export default function Home() {
       <section className="py-16 px-4 bg-park-cream border-t border-park-border">
         <div className="mx-auto max-w-xl text-center">
           <h2 className="font-display font-bold text-2xl text-park-dark uppercase mb-3">
-            Questions?
+            Frågor?
           </h2>
           <p className="text-park-muted text-sm mb-6 leading-relaxed">
-            Reach out to your local event organiser or get in touch with us directly.
+            Kontakta din lokala evenemangsarrangör eller hör av dig till oss direkt.
           </p>
           <a
             href="mailto:hello@parkrun-registration.example.com"
             className="inline-block rounded-full border border-park-border px-6 py-2.5 text-sm font-medium text-park-dark hover:bg-park-white transition-colors"
           >
-            Contact us
+            Kontakta oss
           </a>
         </div>
       </section>

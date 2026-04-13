@@ -17,8 +17,8 @@ const dmSans = DM_Sans({
 })
 
 export const metadata: Metadata = {
-  title: 'Parkrun Registration',
-  description: 'Register for upcoming Parkrun events in your area',
+  title: 'Parkrun Anmälan',
+  description: 'Anmäl dig till kommande Parkrun-evenemang i ditt område',
 }
 
 export default function RootLayout({
@@ -51,13 +51,13 @@ export default function RootLayout({
                 href="/sessions"
                 className="text-park-muted hover:text-park-dark transition-colors"
               >
-                Sessions
+                Evenemang
               </Link>
               <Link
                 href="/admin"
                 className="rounded-full bg-park-dark px-5 py-2 text-park-white text-sm font-semibold hover:bg-park-green transition-colors"
               >
-                Organiser login
+                Arrangörsinloggning
               </Link>
             </div>
           </nav>
@@ -69,14 +69,14 @@ export default function RootLayout({
         <footer className="border-t border-park-border bg-park-white">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <p className="font-display text-sm uppercase tracking-widest text-park-muted">
-              © {new Date().getFullYear()} Parkrun Registration
+              © {new Date().getFullYear()} Parkrun Anmälan
             </p>
             <div className="flex gap-6 text-sm text-park-muted">
               <Link href="/privacy" className="hover:text-park-dark transition-colors">
-                Privacy Policy
+                Integritetspolicy
               </Link>
               <Link href="/terms" className="hover:text-park-dark transition-colors">
-                Terms of Service
+                Användarvillkor
               </Link>
             </div>
           </div>

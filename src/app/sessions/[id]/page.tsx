@@ -81,7 +81,7 @@ export default async function SessionDetailPage({ params }: Props) {
             href="/sessions"
             className="inline-flex items-center gap-1.5 text-park-muted hover:text-park-lime transition-colors text-sm mb-6"
           >
-            <span aria-hidden="true">←</span> All sessions
+            <span aria-hidden="true">←</span> Alla evenemang
           </Link>
 
           <div className="flex flex-wrap items-start justify-between gap-4">
@@ -93,20 +93,20 @@ export default async function SessionDetailPage({ params }: Props) {
             <div className="flex gap-2 pt-1">
               {session.status === 'full' ? (
                 <span className="rounded-full bg-park-muted/20 px-3 py-1 text-xs font-semibold text-park-muted uppercase tracking-wide">
-                  Full
+                  Fullbokad
                 </span>
               ) : session.status === 'closed' ? (
                 <span className="rounded-full bg-park-muted/20 px-3 py-1 text-xs font-semibold text-park-muted uppercase tracking-wide">
-                  Closed
+                  Stängd
                 </span>
               ) : (
                 <span className="rounded-full bg-park-lime/20 px-3 py-1 text-xs font-semibold text-park-lime uppercase tracking-wide">
-                  Open
+                  Öppen
                 </span>
               )}
               {session.status === 'full' && session.waitlist_enabled && (
                 <span className="rounded-full bg-amber-400/20 px-3 py-1 text-xs font-semibold text-amber-300 uppercase tracking-wide">
-                  Waitlist
+                  Väntelista
                 </span>
               )}
             </div>
@@ -127,7 +127,7 @@ export default async function SessionDetailPage({ params }: Props) {
           <dl className="divide-y divide-park-border">
             <div className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
               <dt className="text-xs font-semibold text-park-muted uppercase tracking-wider pt-0.5">
-                Date &amp; time
+                Datum &amp; tid
               </dt>
               <dd className="mt-1 sm:mt-0 sm:col-span-2 text-sm font-medium text-park-dark">
                 {formatDateTime(session.event_date)}
@@ -137,7 +137,7 @@ export default async function SessionDetailPage({ params }: Props) {
             {session.location && (
               <div className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
                 <dt className="text-xs font-semibold text-park-muted uppercase tracking-wider pt-0.5">
-                  Location
+                  Plats
                 </dt>
                 <dd className="mt-1 sm:mt-0 sm:col-span-2 text-sm font-medium text-park-dark">
                   {session.location}
@@ -147,17 +147,17 @@ export default async function SessionDetailPage({ params }: Props) {
 
             <div className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
               <dt className="text-xs font-semibold text-park-muted uppercase tracking-wider pt-0.5">
-                Availability
+                Tillgänglighet
               </dt>
               <dd className="mt-1 sm:mt-0 sm:col-span-2 text-sm">
                 {session.status === 'full' ? (
                   <span className="text-park-muted">
-                    {session.capacity} capacity · Full
+                    {session.capacity} platser · Fullbokad
                   </span>
                 ) : (
                   <span className="text-park-dark">
                     <span className="font-semibold text-park-green">{spotsLeft}</span>
-                    {' '}of {session.capacity} spot{session.capacity === 1 ? '' : 's'} remaining
+                    {' '}av {session.capacity} plats{session.capacity === 1 ? '' : 'er'} kvar
                   </span>
                 )}
               </dd>
@@ -166,7 +166,7 @@ export default async function SessionDetailPage({ params }: Props) {
             {session.registration_opens_at && (
               <div className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
                 <dt className="text-xs font-semibold text-park-muted uppercase tracking-wider pt-0.5">
-                  Reg. opens
+                  Anm. öppnar
                 </dt>
                 <dd className="mt-1 sm:mt-0 sm:col-span-2 text-sm text-park-dark">
                   {formatDate(session.registration_opens_at)}
@@ -177,7 +177,7 @@ export default async function SessionDetailPage({ params }: Props) {
             {session.registration_closes_at && (
               <div className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
                 <dt className="text-xs font-semibold text-park-muted uppercase tracking-wider pt-0.5">
-                  Reg. closes
+                  Anm. stänger
                 </dt>
                 <dd className="mt-1 sm:mt-0 sm:col-span-2 text-sm text-park-dark">
                   {formatDate(session.registration_closes_at)}
@@ -188,7 +188,7 @@ export default async function SessionDetailPage({ params }: Props) {
             {session.pricing_info && (
               <div className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
                 <dt className="text-xs font-semibold text-park-muted uppercase tracking-wider pt-0.5">
-                  Pricing
+                  Pris
                 </dt>
                 <dd className="mt-1 sm:mt-0 sm:col-span-2 text-sm text-park-dark">
                   {session.pricing_info}
@@ -202,7 +202,7 @@ export default async function SessionDetailPage({ params }: Props) {
         {session.notes && (
           <div className="rounded-xl bg-park-white border border-park-border p-6 mb-5">
             <h2 className="font-display font-bold text-sm uppercase tracking-wider text-park-muted mb-3">
-              Notes
+              Anteckningar
             </h2>
             <p className="text-sm text-park-dark leading-relaxed">{session.notes}</p>
           </div>
@@ -213,9 +213,9 @@ export default async function SessionDetailPage({ params }: Props) {
           <div className="rounded-xl bg-amber-50 border border-amber-200 px-5 py-4 mb-3 flex items-start gap-3">
             <span className="text-amber-500 text-lg leading-none mt-0.5">⏳</span>
             <div>
-              <p className="text-sm font-semibold text-amber-800">Registration not open yet</p>
+              <p className="text-sm font-semibold text-amber-800">Anmälan har inte öppnat ännu</p>
               <p className="text-sm text-amber-700 mt-0.5">
-                Registration opens on {formatDate(session.registration_opens_at)}
+                Anmälan öppnar {formatDate(session.registration_opens_at)}
               </p>
             </div>
           </div>
@@ -224,9 +224,9 @@ export default async function SessionDetailPage({ params }: Props) {
           <div className="rounded-xl bg-gray-50 border border-park-border px-5 py-4 mb-3 flex items-start gap-3">
             <span className="text-park-muted text-lg leading-none mt-0.5">🔒</span>
             <div>
-              <p className="text-sm font-semibold text-park-dark">Registration is closed</p>
+              <p className="text-sm font-semibold text-park-dark">Anmälan är stängd</p>
               <p className="text-sm text-park-muted mt-0.5">
-                This session is no longer accepting registrations.
+                Det här evenemanget tar inte längre emot anmälningar.
               </p>
             </div>
           </div>
@@ -235,9 +235,9 @@ export default async function SessionDetailPage({ params }: Props) {
           <div className="rounded-xl bg-red-50 border border-red-200 px-5 py-4 mb-3 flex items-start gap-3">
             <span className="text-red-400 text-lg leading-none mt-0.5">🚫</span>
             <div>
-              <p className="text-sm font-semibold text-red-800">Session is full</p>
+              <p className="text-sm font-semibold text-red-800">Evenemanget är fullbokat</p>
               <p className="text-sm text-red-700 mt-0.5">
-                All spots are taken and there is no waitlist for this session.
+                Alla platser är tagna och det finns ingen väntelista för detta evenemang.
               </p>
             </div>
           </div>
@@ -250,7 +250,7 @@ export default async function SessionDetailPage({ params }: Props) {
               href={`/sessions/${slug}/register`}
               className="flex-1 rounded-full bg-park-lime px-6 py-3.5 text-center text-base font-semibold text-park-dark hover:bg-park-green hover:text-park-white transition-colors"
             >
-              Register now →
+              Anmäl dig nu →
             </Link>
           )}
           {registrationState === 'waitlist' && (
@@ -258,24 +258,24 @@ export default async function SessionDetailPage({ params }: Props) {
               href={`/sessions/${slug}/register`}
               className="flex-1 rounded-full bg-amber-400 px-6 py-3.5 text-center text-base font-semibold text-park-dark hover:bg-amber-500 transition-colors"
             >
-              Join waitlist →
+              Gå med i väntelista →
             </Link>
           )}
           {(registrationState === 'closed' || registrationState === 'full_no_waitlist') && (
             <div className="flex-1 rounded-full bg-park-border px-6 py-3.5 text-center text-base font-semibold text-park-muted cursor-not-allowed">
-              Registration closed
+              Anmälan stängd
             </div>
           )}
           {registrationState === 'not_open_yet' && (
             <div className="flex-1 rounded-full bg-park-border px-6 py-3.5 text-center text-base font-semibold text-park-muted cursor-not-allowed">
-              Registration not yet open
+              Anmälan har inte öppnat ännu
             </div>
           )}
           <Link
             href="/sessions"
             className="flex-1 rounded-full border border-park-border px-6 py-3.5 text-center text-base font-semibold text-park-dark hover:bg-park-white transition-colors"
           >
-            Browse other sessions
+            Visa fler evenemang
           </Link>
         </div>
       </div>

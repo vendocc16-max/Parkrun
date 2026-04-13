@@ -45,10 +45,10 @@ export default function LoginPage() {
             <span className="font-display font-bold text-park-lime text-lg">P</span>
           </div>
           <h1 className="font-display font-bold text-2xl uppercase text-park-dark">
-            Organiser login
+            Arrangörsinloggning
           </h1>
           <p className="mt-1 text-sm text-park-muted">
-            Sign in to manage sessions and registrations.
+            Logga in för att hantera evenemang och anmälningar.
           </p>
         </div>
 
@@ -65,7 +65,7 @@ export default function LoginPage() {
                 htmlFor="email"
                 className="block text-xs font-semibold text-park-muted uppercase tracking-wider mb-1.5"
               >
-                Email
+                E-post
               </label>
               <input
                 id="email"
@@ -85,7 +85,7 @@ export default function LoginPage() {
                 htmlFor="password"
                 className="block text-xs font-semibold text-park-muted uppercase tracking-wider mb-1.5"
               >
-                Password
+                Lösenord
               </label>
               <input
                 id="password"
@@ -104,7 +104,7 @@ export default function LoginPage() {
               disabled={isSubmitting}
               className="w-full rounded-full bg-park-dark px-4 py-3 text-sm font-semibold text-park-white hover:bg-park-green transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2"
             >
-              {isSubmitting ? 'Signing in…' : 'Sign in →'}
+              {isSubmitting ? 'Loggar in…' : 'Logga in →'}
             </button>
           </form>
         </div>
