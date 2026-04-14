@@ -23,6 +23,7 @@ const schema = z.object({
   pricing_info: z.string(),
   notes: z.string(),
   status: z.enum(['draft', 'published', 'full', 'closed', 'cancelled']),
+  promotion_rank: z.string(),
 })
 
 type FormValues = z.infer<typeof schema>
@@ -53,6 +54,7 @@ export function EditSessionForm({ session }: { session: Session }) {
       pricing_info: session.pricing_info ?? '',
       notes: session.notes ?? '',
       status: session.status,
+      promotion_rank: session.promotion_rank != null ? String(session.promotion_rank) : '',
     },
   })
 
@@ -211,6 +213,22 @@ export function EditSessionForm({ session }: { session: Session }) {
             {...register('notes')}
             className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
           />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Promotion rank
+          </label>
+          <input
+            type="number"
+            min={1}
+            {...register('promotion_rank')}
+            placeholder="e.g. 1"
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+          />
+          <p className="mt-1 text-xs text-gray-500">
+            1 = visas i hero-sektionen på startsidan. Lämna tomt för ingen.
+          </p>
         </div>
       </div>
 

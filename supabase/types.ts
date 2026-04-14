@@ -72,6 +72,7 @@ export type Session = {
   status: SessionStatus
   pricing_info: string | null
   notes: string | null
+  promotion_rank: number | null
   created_by: string | null
   created_at: string
   updated_at: string
@@ -197,6 +198,7 @@ export type InsertSession = {
   status?: SessionStatus
   pricing_info?: string | null
   notes?: string | null
+  promotion_rank?: number | null
   created_by?: string | null
 }
 export type UpdateSession = Partial<InsertSession>

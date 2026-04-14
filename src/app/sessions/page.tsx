@@ -30,6 +30,7 @@ export default async function SessionsPage() {
     .from('sessions')
     .select('*')
     .in('status', ['published', 'full'])
+    .order('promotion_rank', { ascending: true, nullsFirst: false })
     .order('event_date', { ascending: true })
 
   const sessions = (sessionsData ?? []) as Session[]
@@ -102,6 +103,11 @@ export default async function SessionsPage() {
                       <h2 className="font-display font-bold text-xl uppercase text-park-dark leading-tight">
                         {session.title}
                       </h2>
+                      {session.promotion_rank != null && (
+                        <span className="rounded-full bg-park-green px-2.5 py-0.5 text-xs font-semibold text-park-lime uppercase tracking-wide">
+                          Utvald
+                        </span>
+                      )}
                       {isFull ? (
                         <span className="rounded-full bg-park-muted/15 px-2.5 py-0.5 text-xs font-semibold text-park-muted uppercase tracking-wide">
                           Fullbokad

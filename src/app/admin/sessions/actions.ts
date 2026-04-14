@@ -19,6 +19,7 @@ export type SessionFormData = {
   pricing_info: string
   notes: string
   status: SessionStatus
+  promotion_rank: string
 }
 
 async function getAuthUser() {
@@ -65,6 +66,7 @@ export async function createSession(
     pricing_info: data.pricing_info || null,
     notes: data.notes || null,
     status: data.status,
+    promotion_rank: data.promotion_rank ? parseInt(data.promotion_rank, 10) : null,
     created_by: organizer?.id ?? null,
   }
 
@@ -106,6 +108,7 @@ export async function updateSession(
     pricing_info: data.pricing_info || null,
     notes: data.notes || null,
     status: data.status,
+    promotion_rank: data.promotion_rank ? parseInt(data.promotion_rank, 10) : null,
   }
 
   const { error } = await adminClient.from('sessions').update(update).eq('id', id)
