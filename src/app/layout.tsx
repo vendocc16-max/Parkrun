@@ -35,18 +35,18 @@ export default function RootLayout({
         <SentryClientInit />
 
         {/* Navigation */}
-        <header className="sticky top-0 z-50 bg-park-white/95 backdrop-blur-sm border-b border-park-border">
-          <nav className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-park-green text-park-lime font-display font-bold text-sm tracking-tight">
-                P
+        <header className="sticky top-0 z-50 bg-park-white border-b-2 border-park-dark">
+          <nav className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex h-14 items-center justify-between">
+            <Link href="/" className="flex items-center gap-3 group">
+              <span className="font-display font-black text-2xl text-park-lime bg-park-dark px-2 py-0.5 leading-none">
+                P/
               </span>
               <span className="font-display font-bold text-xl uppercase tracking-wide text-park-dark">
                 Parkrun
               </span>
             </Link>
 
-            <div className="flex items-center gap-5 text-sm font-medium">
+            <div className="flex items-center gap-6 text-sm font-medium">
               <Link
                 href="/sessions"
                 className="text-park-muted hover:text-park-dark transition-colors"
@@ -55,7 +55,7 @@ export default function RootLayout({
               </Link>
               <Link
                 href="/admin"
-                className="rounded-full bg-park-dark px-5 py-2 text-park-white text-sm font-semibold hover:bg-park-green transition-colors"
+                className="border border-park-dark px-4 py-1.5 text-park-dark text-sm font-semibold hover:bg-park-dark hover:text-park-white transition-colors"
               >
                 Arrangörsinloggning
               </Link>

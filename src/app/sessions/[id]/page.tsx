@@ -13,12 +13,12 @@ export async function generateMetadata({ params }: Props) {
   const { data } = await supabase.from('sessions').select('title').eq('slug', slug).single()
   const session = data as Pick<Session, 'title'> | null
   return {
-    title: session ? `${session.title} | Parkrun Registration` : 'Session | Parkrun Registration',
+    title: session ? `${session.title} | Parkrun Anmälan` : 'Evenemang | Parkrun Anmälan',
   }
 }
 
 function formatDateTime(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString('en-GB', {
+  return new Date(dateStr).toLocaleDateString('sv-SE', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -29,7 +29,7 @@ function formatDateTime(dateStr: string) {
 }
 
 function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString('en-GB', {
+  return new Date(dateStr).toLocaleDateString('sv-SE', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -81,7 +81,7 @@ export default async function SessionDetailPage({ params }: Props) {
             href="/sessions"
             className="inline-flex items-center gap-1.5 text-park-muted hover:text-park-lime transition-colors text-sm mb-6"
           >
-            <span aria-hidden="true">←</span> Alla evenemang
+            ← Alla evenemang
           </Link>
 
           <div className="flex flex-wrap items-start justify-between gap-4">
@@ -92,20 +92,20 @@ export default async function SessionDetailPage({ params }: Props) {
             </div>
             <div className="flex gap-2 pt-1">
               {session.status === 'full' ? (
-                <span className="rounded-full bg-park-muted/20 px-3 py-1 text-xs font-semibold text-park-muted uppercase tracking-wide">
+                <span className="border border-park-muted/40 px-3 py-1 text-xs font-semibold text-park-muted uppercase tracking-wide">
                   Fullbokad
                 </span>
               ) : session.status === 'closed' ? (
-                <span className="rounded-full bg-park-muted/20 px-3 py-1 text-xs font-semibold text-park-muted uppercase tracking-wide">
+                <span className="border border-park-muted/40 px-3 py-1 text-xs font-semibold text-park-muted uppercase tracking-wide">
                   Stängd
                 </span>
               ) : (
-                <span className="rounded-full bg-park-lime/20 px-3 py-1 text-xs font-semibold text-park-lime uppercase tracking-wide">
+                <span className="border border-park-lime/60 px-3 py-1 text-xs font-semibold text-park-lime uppercase tracking-wide">
                   Öppen
                 </span>
               )}
               {session.status === 'full' && session.waitlist_enabled && (
-                <span className="rounded-full bg-amber-400/20 px-3 py-1 text-xs font-semibold text-amber-300 uppercase tracking-wide">
+                <span className="border border-amber-400/40 px-3 py-1 text-xs font-semibold text-amber-300 uppercase tracking-wide">
                   Väntelista
                 </span>
               )}
@@ -123,13 +123,13 @@ export default async function SessionDetailPage({ params }: Props) {
       {/* Main content */}
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 -mt-6 pb-16">
         {/* Info card */}
-        <div className="rounded-xl bg-park-white border border-park-border shadow-sm overflow-hidden mb-5">
+        <div className="bg-park-white border border-park-border overflow-hidden mb-5">
           <dl className="divide-y divide-park-border">
             <div className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
               <dt className="text-xs font-semibold text-park-muted uppercase tracking-wider pt-0.5">
                 Datum &amp; tid
               </dt>
-              <dd className="mt-1 sm:mt-0 sm:col-span-2 text-sm font-medium text-park-dark">
+              <dd className="mt-1 sm:mt-0 sm:col-span-2 text-sm font-medium text-park-dark capitalize">
                 {formatDateTime(session.event_date)}
               </dd>
             </div>
@@ -168,7 +168,7 @@ export default async function SessionDetailPage({ params }: Props) {
                 <dt className="text-xs font-semibold text-park-muted uppercase tracking-wider pt-0.5">
                   Anm. öppnar
                 </dt>
-                <dd className="mt-1 sm:mt-0 sm:col-span-2 text-sm text-park-dark">
+                <dd className="mt-1 sm:mt-0 sm:col-span-2 text-sm text-park-dark capitalize">
                   {formatDate(session.registration_opens_at)}
                 </dd>
               </div>
@@ -179,7 +179,7 @@ export default async function SessionDetailPage({ params }: Props) {
                 <dt className="text-xs font-semibold text-park-muted uppercase tracking-wider pt-0.5">
                   Anm. stänger
                 </dt>
-                <dd className="mt-1 sm:mt-0 sm:col-span-2 text-sm text-park-dark">
+                <dd className="mt-1 sm:mt-0 sm:col-span-2 text-sm text-park-dark capitalize">
                   {formatDate(session.registration_closes_at)}
                 </dd>
               </div>
@@ -200,7 +200,7 @@ export default async function SessionDetailPage({ params }: Props) {
 
         {/* Notes */}
         {session.notes && (
-          <div className="rounded-xl bg-park-white border border-park-border p-6 mb-5">
+          <div className="bg-park-white border border-park-border p-6 mb-5">
             <h2 className="font-display font-bold text-sm uppercase tracking-wider text-park-muted mb-3">
               Anteckningar
             </h2>
@@ -210,36 +210,27 @@ export default async function SessionDetailPage({ params }: Props) {
 
         {/* Status banners */}
         {registrationState === 'not_open_yet' && session.registration_opens_at && (
-          <div className="rounded-xl bg-amber-50 border border-amber-200 px-5 py-4 mb-3 flex items-start gap-3">
-            <span className="text-amber-500 text-lg leading-none mt-0.5">⏳</span>
-            <div>
-              <p className="text-sm font-semibold text-amber-800">Anmälan har inte öppnat ännu</p>
-              <p className="text-sm text-amber-700 mt-0.5">
-                Anmälan öppnar {formatDate(session.registration_opens_at)}
-              </p>
-            </div>
+          <div className="border-l-4 border-l-amber-400 bg-amber-50 px-5 py-4 mb-3">
+            <p className="text-sm font-semibold text-amber-800">Anmälan har inte öppnat ännu</p>
+            <p className="text-sm text-amber-700 mt-0.5">
+              Anmälan öppnar {formatDate(session.registration_opens_at)}
+            </p>
           </div>
         )}
-        {(registrationState === 'closed') && (
-          <div className="rounded-xl bg-gray-50 border border-park-border px-5 py-4 mb-3 flex items-start gap-3">
-            <span className="text-park-muted text-lg leading-none mt-0.5">🔒</span>
-            <div>
-              <p className="text-sm font-semibold text-park-dark">Anmälan är stängd</p>
-              <p className="text-sm text-park-muted mt-0.5">
-                Det här evenemanget tar inte längre emot anmälningar.
-              </p>
-            </div>
+        {registrationState === 'closed' && (
+          <div className="border-l-4 border-l-park-border bg-park-white px-5 py-4 mb-3 border border-park-border">
+            <p className="text-sm font-semibold text-park-dark">Anmälan är stängd</p>
+            <p className="text-sm text-park-muted mt-0.5">
+              Det här evenemanget tar inte längre emot anmälningar.
+            </p>
           </div>
         )}
         {registrationState === 'full_no_waitlist' && (
-          <div className="rounded-xl bg-red-50 border border-red-200 px-5 py-4 mb-3 flex items-start gap-3">
-            <span className="text-red-400 text-lg leading-none mt-0.5">🚫</span>
-            <div>
-              <p className="text-sm font-semibold text-red-800">Evenemanget är fullbokat</p>
-              <p className="text-sm text-red-700 mt-0.5">
-                Alla platser är tagna och det finns ingen väntelista för detta evenemang.
-              </p>
-            </div>
+          <div className="border-l-4 border-l-red-400 bg-red-50 px-5 py-4 mb-3">
+            <p className="text-sm font-semibold text-red-800">Evenemanget är fullbokat</p>
+            <p className="text-sm text-red-700 mt-0.5">
+              Alla platser är tagna och det finns ingen väntelista för detta evenemang.
+            </p>
           </div>
         )}
 
@@ -248,32 +239,32 @@ export default async function SessionDetailPage({ params }: Props) {
           {registrationState === 'open' && (
             <Link
               href={`/sessions/${slug}/register`}
-              className="flex-1 rounded-full bg-park-lime px-6 py-3.5 text-center text-base font-semibold text-park-dark hover:bg-park-green hover:text-park-white transition-colors"
+              className="flex-1 bg-park-lime px-6 py-3.5 text-center text-base font-semibold text-park-dark hover:bg-park-green hover:text-park-white transition-colors"
             >
-              Anmäl dig nu →
+              Anmäl dig nu
             </Link>
           )}
           {registrationState === 'waitlist' && (
             <Link
               href={`/sessions/${slug}/register`}
-              className="flex-1 rounded-full bg-amber-400 px-6 py-3.5 text-center text-base font-semibold text-park-dark hover:bg-amber-500 transition-colors"
+              className="flex-1 bg-amber-400 px-6 py-3.5 text-center text-base font-semibold text-park-dark hover:bg-amber-500 transition-colors"
             >
-              Gå med i väntelista →
+              Gå med i väntelista
             </Link>
           )}
           {(registrationState === 'closed' || registrationState === 'full_no_waitlist') && (
-            <div className="flex-1 rounded-full bg-park-border px-6 py-3.5 text-center text-base font-semibold text-park-muted cursor-not-allowed">
+            <div className="flex-1 border border-park-border px-6 py-3.5 text-center text-base font-semibold text-park-muted cursor-not-allowed">
               Anmälan stängd
             </div>
           )}
           {registrationState === 'not_open_yet' && (
-            <div className="flex-1 rounded-full bg-park-border px-6 py-3.5 text-center text-base font-semibold text-park-muted cursor-not-allowed">
+            <div className="flex-1 border border-park-border px-6 py-3.5 text-center text-base font-semibold text-park-muted cursor-not-allowed">
               Anmälan har inte öppnat ännu
             </div>
           )}
           <Link
             href="/sessions"
-            className="flex-1 rounded-full border border-park-border px-6 py-3.5 text-center text-base font-semibold text-park-dark hover:bg-park-white transition-colors"
+            className="flex-1 border border-park-border px-6 py-3.5 text-center text-base font-semibold text-park-dark hover:bg-park-white transition-colors"
           >
             Visa fler evenemang
           </Link>

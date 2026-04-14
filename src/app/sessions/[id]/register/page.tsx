@@ -58,19 +58,18 @@ export default async function RegisterPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-12">
-      <nav className="mb-6 text-sm text-gray-500">
-        <Link href={`/sessions/${slug}`} className="hover:text-gray-700 transition-colors">
-          ← Back to session
+      <nav className="mb-6 text-sm text-park-muted">
+        <Link href={`/sessions/${slug}`} className="hover:text-park-dark transition-colors">
+          ← Tillbaka till evenemanget
         </Link>
       </nav>
 
-      <h1 className="text-2xl font-bold text-gray-900 mb-1">
-        {isWaitlist ? 'Join the waitlist' : 'Register for this session'}
+      <h1 className="font-display font-extrabold text-3xl uppercase text-park-dark mb-1">
+        {isWaitlist ? 'Gå med i väntelista' : 'Anmäl dig'}
       </h1>
-      <p className="text-gray-500 mb-2 font-medium text-sm">{session.title}</p>
-      <p className="text-gray-400 mb-8 text-sm">
-        Complete the form below to secure your spot. You can register up to{' '}
-        {5} participants per submission.
+      <p className="text-park-muted mb-2 font-medium text-sm">{session.title}</p>
+      <p className="text-park-muted mb-8 text-sm">
+        Fyll i formuläret nedan för att säkra din plats. Du kan anmäla upp till 5 deltagare per anmälan.
       </p>
 
       <RegistrationForm
