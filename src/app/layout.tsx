@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Barlow_Condensed, DM_Sans } from 'next/font/google'
+import { Barlow_Condensed, DM_Sans, Space_Mono } from 'next/font/google'
 import Link from 'next/link'
 import { SentryClientInit } from '@/lib/sentry-client'
 import './globals.css'
@@ -16,6 +16,12 @@ const dmSans = DM_Sans({
   weight: ['400', '500', '600'],
 })
 
+const spaceMono = Space_Mono({
+  variable: '--font-space-mono',
+  subsets: ['latin'],
+  weight: ['400', '700'],
+})
+
 export const metadata: Metadata = {
   title: 'Parkrun Anmälan',
   description: 'Anmäl dig till kommande Parkrun-evenemang i ditt område',
@@ -28,8 +34,8 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      className={`${barlowCondensed.variable} ${dmSans.variable} h-full antialiased`}
+      lang="sv"
+      className={`${barlowCondensed.variable} ${dmSans.variable} ${spaceMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-park-cream text-park-dark">
         <SentryClientInit />
@@ -66,9 +72,9 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
 
         {/* Footer */}
-        <footer className="border-t border-park-border bg-park-white">
+        <footer className="border-t-2 border-park-dark bg-park-white">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <p className="font-display text-sm uppercase tracking-widest text-park-muted">
+            <p className="font-mono text-xs uppercase tracking-widest text-park-muted">
               © {new Date().getFullYear()} Parkrun Anmälan
             </p>
             <div className="flex gap-6 text-sm text-park-muted">

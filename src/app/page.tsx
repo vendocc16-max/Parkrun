@@ -48,85 +48,108 @@ export default async function Home() {
       <section className="bg-park-dark">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
           <div className={`flex flex-col ${featured ? 'lg:flex-row lg:items-start lg:gap-20' : ''}`}>
-            {/* Left: heading + CTAs */}
+
+            {/* Left: typographic headline */}
             <div className="max-w-2xl lg:flex-1">
-              <p className="font-display text-park-lime uppercase tracking-[0.25em] text-sm font-semibold mb-5">
-                Gratis · Varje vecka · För alla
+              <p className="font-mono text-park-lime uppercase tracking-[0.2em] text-xs font-bold mb-6">
+                Gratis · Varje vecka · Öppet för alla
               </p>
-              <h1 className="font-display font-extrabold text-park-white uppercase leading-[0.9] tracking-tight">
-                <span className="block text-6xl sm:text-7xl lg:text-8xl">Ditt nästa</span>
-                <span className="block text-6xl sm:text-7xl lg:text-8xl text-park-lime">parkrun</span>
-                <span className="block text-6xl sm:text-7xl lg:text-8xl">börjar här</span>
+              <h1 className="font-display font-extrabold text-park-white uppercase leading-[0.88] tracking-tight">
+                <span
+                  className="block text-6xl sm:text-7xl lg:text-8xl animate-fade-up"
+                  style={{ animationDelay: '0ms' }}
+                >
+                  Ditt nästa
+                </span>
+                <span
+                  className="block text-6xl sm:text-7xl lg:text-8xl text-park-lime animate-fade-up"
+                  style={{ animationDelay: '80ms' }}
+                >
+                  parkrun
+                </span>
+                <span
+                  className="block text-6xl sm:text-7xl lg:text-8xl animate-fade-up"
+                  style={{ animationDelay: '160ms' }}
+                >
+                  börjar här
+                </span>
               </h1>
-              <p className="mt-8 text-base sm:text-lg text-park-muted leading-relaxed max-w-lg">
-                Bläddra bland kommande evenemang, säkra din plats och ta med hela familjen.
-                Gratis, välkomnande och öppet för alla — bara dyka upp och springa.
+              <p className="mt-8 text-base text-park-muted leading-relaxed max-w-md">
+                Bläddra bland kommande evenemang och säkra din plats.
+                Gratis, välkomnande, öppet för hela familjen.
               </p>
-              <div className="mt-10 flex flex-col sm:flex-row gap-3">
+              <div className="mt-10">
                 <Link
                   href="/sessions"
-                  className="inline-flex items-center justify-center bg-park-lime px-8 py-3.5 text-park-dark font-semibold text-base hover:bg-white transition-colors"
+                  className="inline-block bg-park-lime px-8 py-3.5 text-park-dark font-semibold text-base hover:bg-white transition-colors"
                 >
                   Visa evenemang
                 </Link>
               </div>
             </div>
 
-            {/* Right: featured event notice */}
+            {/* Right: race-notice card */}
             {featured && (
-              <div className="mt-12 lg:mt-0 lg:w-72 xl:w-80 shrink-0">
-                <div className="border-2 border-park-lime bg-park-dark">
-                  {/* Notice header */}
-                  <div className="bg-park-lime px-4 py-2">
-                    <p className="font-display font-black text-park-dark uppercase text-xs tracking-[0.2em]">
-                      Nästa evenemang
+              <div className="mt-14 lg:mt-0 lg:w-72 xl:w-80 shrink-0">
+                {/* Notice strip */}
+                <div className="bg-park-lime px-4 py-2 flex items-center justify-between">
+                  <p className="font-mono font-bold text-park-dark uppercase text-xs tracking-[0.2em]">
+                    Nästa evenemang
+                  </p>
+                  {!isFeaturedFull && (
+                    <p className="font-mono font-bold text-park-dark text-xs">
+                      {featuredSpotsLeft} kvar
                     </p>
-                  </div>
+                  )}
+                </div>
 
-                  {/* Notice body */}
-                  <div className="px-5 py-5 space-y-4">
-                    <h2 className="font-display font-bold text-xl text-park-white uppercase leading-tight">
+                {/* Notice body — structured like a race-day entry form */}
+                <div className="border-2 border-park-lime border-t-0 bg-park-dark divide-y divide-park-green/30">
+                  <div className="px-5 pt-5 pb-4">
+                    <h2 className="font-display font-black text-2xl text-park-white uppercase leading-tight">
                       {featured.title}
                     </h2>
+                  </div>
 
-                    <div className="space-y-1.5 text-sm text-park-muted">
-                      <p>
-                        <span className="uppercase text-xs tracking-wider text-park-muted/60 block">Datum</span>
-                        <span className="text-park-white capitalize">{formatDate(featured.event_date)}</span>
-                      </p>
-                      <p>
-                        <span className="uppercase text-xs tracking-wider text-park-muted/60 block">Tid</span>
-                        <span className="text-park-white">{formatTime(featured.event_date)}</span>
-                      </p>
-                      {featured.location && (
-                        <p>
-                          <span className="uppercase text-xs tracking-wider text-park-muted/60 block">Plats</span>
-                          <span className="text-park-white">{featured.location}</span>
+                  <div className="px-5 py-4 grid grid-cols-2 gap-x-4 gap-y-3">
+                    <div>
+                      <p className="font-mono text-park-muted/60 text-[10px] uppercase tracking-widest mb-0.5">Datum</p>
+                      <p className="text-park-white text-sm capitalize leading-snug">{formatDate(featured.event_date)}</p>
+                    </div>
+                    <div>
+                      <p className="font-mono text-park-muted/60 text-[10px] uppercase tracking-widest mb-0.5">Starttid</p>
+                      <p className="font-mono text-park-lime text-lg font-bold leading-none">{formatTime(featured.event_date)}</p>
+                    </div>
+                    {featured.location && (
+                      <div className="col-span-2">
+                        <p className="font-mono text-park-muted/60 text-[10px] uppercase tracking-widest mb-0.5">Plats</p>
+                        <p className="text-park-white text-sm">{featured.location}</p>
+                      </div>
+                    )}
+                    <div className="col-span-2">
+                      <p className="font-mono text-park-muted/60 text-[10px] uppercase tracking-widest mb-0.5">Platser</p>
+                      {isFeaturedFull ? (
+                        <p className="text-park-muted text-sm font-semibold">
+                          {featured.waitlist_enabled ? 'Fullbokad — väntelista öppen' : 'Fullbokad'}
+                        </p>
+                      ) : (
+                        <p className="font-mono text-park-lime text-sm font-bold">
+                          {featuredSpotsLeft} / {featured.capacity} lediga
                         </p>
                       )}
-                      <p>
-                        <span className="uppercase text-xs tracking-wider text-park-muted/60 block">Platser</span>
-                        {isFeaturedFull ? (
-                          <span className="text-park-muted">
-                            {featured.waitlist_enabled ? 'Väntelista tillgänglig' : 'Fullbokad'}
-                          </span>
-                        ) : (
-                          <span className="text-park-lime font-semibold">
-                            {featuredSpotsLeft} kvar
-                          </span>
-                        )}
-                      </p>
                     </div>
+                  </div>
 
+                  <div className="px-5 py-4">
                     <Link
                       href={`/sessions/${featured.slug}`}
-                      className={`block text-center py-2.5 text-sm font-semibold transition-colors ${
+                      className={`block text-center py-2.5 text-sm font-bold uppercase tracking-wide transition-colors ${
                         isFeaturedFull
-                          ? 'border border-park-muted text-park-muted hover:border-park-white hover:text-park-white'
+                          ? 'border border-park-muted/40 text-park-muted hover:border-park-white hover:text-park-white'
                           : 'bg-park-lime text-park-dark hover:bg-white'
                       }`}
                     >
-                      {isFeaturedFull ? 'Gå med i väntelista' : 'Visa & anmäl'}
+                      {isFeaturedFull ? 'Gå med i väntelista' : 'Anmäl dig'}
                     </Link>
                   </div>
                 </div>
@@ -136,16 +159,14 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* CTA Banner */}
-      <section className="bg-park-lime py-14 px-4">
-        <div className="mx-auto max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-6">
+      {/* Rule + CTA — newspaper-style section break */}
+      <section className="bg-park-lime">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div>
+            <p className="font-mono text-park-dark/50 uppercase text-xs tracking-widest mb-1">Parkrun — 5 km — gratis</p>
             <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-park-dark uppercase leading-tight">
               Redo att springa?
             </h2>
-            <p className="text-park-dark/60 mt-1 text-sm">
-              Platserna tar slut snabbt — anmäl dig tidigt.
-            </p>
           </div>
           <Link
             href="/sessions"
@@ -156,9 +177,9 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Contact */}
+      {/* Contact — minimal */}
       <section className="py-16 px-4 bg-park-cream border-t border-park-border">
-        <div className="mx-auto max-w-xl text-center">
+        <div className="mx-auto max-w-xl">
           <h2 className="font-display font-bold text-2xl text-park-dark uppercase mb-3">
             Frågor?
           </h2>
