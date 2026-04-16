@@ -146,7 +146,7 @@ export default function Home() {
             Kontakta din lokala evenemangsarrangör eller hör av dig till oss direkt.
           </p>
           <a
-            href="mailto:hello@parkrun-registration.example.com"
+            href="mailto:ivantruedson@gmail.com"
             className="inline-block rounded-full border border-park-border px-6 py-2.5 text-sm font-medium text-park-dark hover:bg-park-white transition-colors"
           >
             Kontakta oss

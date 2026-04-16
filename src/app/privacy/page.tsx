@@ -50,8 +50,8 @@ export default function PrivacyPage() {
           <h2 className="font-display font-bold text-xl uppercase mb-3">5. Kontakt</h2>
           <p className="text-park-muted leading-relaxed">
             Frågor om vår hantering av personuppgifter skickas till{' '}
-            <a href="mailto:hello@parkrun-registration.example.com" className="text-park-green underline">
-              hello@parkrun-registration.example.com
+            <a href="mailto:ivantruedson@gmail.com" className="text-park-green underline">
+              ivantruedson@gmail.com
             </a>
             .
           </p>
