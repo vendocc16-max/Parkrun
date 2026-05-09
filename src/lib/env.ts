@@ -1,39 +1,38 @@
 import { z } from "zod";
 
+const optionalString = z.preprocess((value) => value === '' ? undefined : value, z.string().optional());
+const optionalUrl = z.preprocess((value) => value === '' ? undefined : value, z.string().url().optional());
+const optionalEmail = z.preprocess((value) => value === '' ? undefined : value, z.string().email().optional());
+const optionalFlag = z.preprocess(
+  (value) => value === '' ? undefined : value,
+  z.enum(["true", "false"]).transform(v => v === "true").optional(),
+);
+
 const envSchema = z.object({
   // Supabase
   NEXT_PUBLIC_SUPABASE_URL: z.string().url("Invalid Supabase URL"),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1, "Supabase anon key is required"),
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1, "Supabase service role key is required"),
 
-  // Resend
-  RESEND_API_KEY: z.string().min(1, "Resend API key is required"),
-  RESEND_FROM_EMAIL: z.string().email("Invalid Resend from email"),
+  // Resend (optional confirmation emails)
+  RESEND_API_KEY: optionalString,
+  RESEND_FROM_EMAIL: optionalEmail,
 
   // App URLs
-  NEXT_PUBLIC_APP_URL: z.string().url("Invalid app URL"),
+  NEXT_PUBLIC_APP_URL: optionalUrl,
 
-  // Internal secrets
-  INTERNAL_API_SECRET: z.string().min(1, "Internal API secret is required"),
-  CRON_SECRET: z.string().min(1, "Cron secret is required"),
-
-  // Upstash Redis (optional in development)
-  UPSTASH_REDIS_REST_URL: z.string().url("Invalid Upstash Redis URL").optional(),
-  UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
-
-  // Turnstile (optional in development)
-  NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
-  TURNSTILE_SECRET_KEY: z.string().optional(),
+  // Internal secrets (optional background/internal APIs)
+  INTERNAL_API_SECRET: optionalString,
+  CRON_SECRET: optionalString,
 
   // Sentry (optional in development)
-  NEXT_PUBLIC_SENTRY_DSN: z.string().url("Invalid Sentry DSN").optional(),
-  SENTRY_ENVIRONMENT: z.string().optional(),
-  SENTRY_AUTH_TOKEN: z.string().optional(),
+  NEXT_PUBLIC_SENTRY_DSN: optionalUrl,
+  SENTRY_ENVIRONMENT: optionalString,
+  SENTRY_AUTH_TOKEN: optionalString,
 
   // Feature flags
-  RATE_LIMIT_ENABLED: z.enum(["true", "false"]).transform(v => v === "true").optional(),
-  CAPTCHA_ENABLED: z.enum(["true", "false"]).transform(v => v === "true").optional(),
-  SENTRY_ENABLED: z.enum(["true", "false"]).transform(v => v === "true").optional(),
+  RATE_LIMIT_ENABLED: optionalFlag,
+  SENTRY_ENABLED: optionalFlag,
 });
 
 type Env = z.infer<typeof envSchema>;
@@ -56,14 +55,6 @@ const validateEnv = (): Env => {
     INTERNAL_API_SECRET: process.env.INTERNAL_API_SECRET,
     CRON_SECRET: process.env.CRON_SECRET,
 
-    // Upstash Redis
-    UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
-    UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
-
-    // Turnstile
-    NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
-    TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
-
     // Sentry
     NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
     SENTRY_ENVIRONMENT: process.env.SENTRY_ENVIRONMENT,
@@ -71,7 +62,6 @@ const validateEnv = (): Env => {
 
     // Feature flags
     RATE_LIMIT_ENABLED: process.env.RATE_LIMIT_ENABLED,
-    CAPTCHA_ENABLED: process.env.CAPTCHA_ENABLED,
     SENTRY_ENABLED: process.env.SENTRY_ENABLED,
   };
 

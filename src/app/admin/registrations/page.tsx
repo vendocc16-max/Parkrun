@@ -52,18 +52,18 @@ export default async function RegistrationsPage({ searchParams }: Props) {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Registrations</h1>
-        <p className="text-gray-500 mt-1">{rows.length} registrations</p>
+        <h1 className="text-2xl font-semibold text-park-dark">Registrations</h1>
+        <p className="text-park-muted mt-1">{rows.length} registrations</p>
       </div>
 
       {/* Filters */}
       <form method="get" className="mb-6 flex flex-wrap gap-3 items-end">
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">Session</label>
+          <label className="block text-xs font-medium text-park-muted mb-1">Session</label>
           <select
             name="session"
             defaultValue={sessionFilter ?? ''}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+            className="rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
           >
             <option value="">All sessions</option>
             {(sessions as Session[] | null)?.map((s) => (
@@ -74,11 +74,11 @@ export default async function RegistrationsPage({ searchParams }: Props) {
           </select>
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">Status</label>
+          <label className="block text-xs font-medium text-park-muted mb-1">Status</label>
           <select
             name="status"
             defaultValue={statusFilter ?? ''}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+            className="rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
           >
             <option value="">All statuses</option>
             <option value="confirmed">Confirmed</option>
@@ -89,33 +89,33 @@ export default async function RegistrationsPage({ searchParams }: Props) {
           </select>
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">From date</label>
+          <label className="block text-xs font-medium text-park-muted mb-1">From date</label>
           <input
             type="date"
             name="from"
             defaultValue={fromFilter ?? ''}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+            className="rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">To date</label>
+          <label className="block text-xs font-medium text-park-muted mb-1">To date</label>
           <input
             type="date"
             name="to"
             defaultValue={toFilter ?? ''}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+            className="rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
           />
         </div>
         <button
           type="submit"
-          className="rounded-md bg-green-700 px-4 py-2 text-sm font-semibold text-white hover:bg-green-800 transition-colors"
+          className="rounded-md bg-park-green px-4 py-2 text-sm font-semibold text-white hover:bg-park-dark transition-[background-color,border-color,color,box-shadow,opacity]"
         >
           Filter
         </button>
         {(sessionFilter || statusFilter || fromFilter || toFilter) && (
           <a
             href="/admin/registrations"
-            className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+            className="rounded-md border border-park-border px-4 py-2 text-sm font-medium text-park-muted hover:bg-park-cream transition-[background-color,border-color,color,box-shadow,opacity]"
           >
             Clear
           </a>

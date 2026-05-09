@@ -53,7 +53,7 @@ The app will be available at `http://localhost:3000`.
 
 ## Environment Variables
 
-Copy `.env.local.example` to `.env.local`. Required variables:
+Copy `.env.local.example` to `.env.local`. Supabase is required; the other values are optional launch helpers:
 
 ```
 # Supabase
@@ -61,22 +61,22 @@ NEXT_PUBLIC_SUPABASE_URL=https://<project-ref>.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon-key>
 SUPABASE_SERVICE_ROLE_KEY=<service-role-key>   # server-side only, never expose to client
 
-# Resend (email)
-RESEND_API_KEY=re_<key>
-RESEND_FROM_ADDRESS=noreply@yourdomain.com
+# Optional confirmation email
+RESEND_API_KEY=
+RESEND_FROM_EMAIL=
 
-# App
-NEXT_PUBLIC_APP_URL=http://localhost:3000      # change to production URL in prod
+# Optional app URL for generated links
+NEXT_PUBLIC_APP_URL=http://localhost:3000
 
-# Sentry (optional but recommended)
-SENTRY_DSN=https://<key>@sentry.io/<project>
+# Optional monitoring
+SENTRY_DSN=
 ```
 
 ---
 
 ## Email Deliverability Checklist
 
-Complete all of these before sending any real emails.
+Complete these before relying on confirmation emails. Registration still succeeds without email because Supabase is the source of truth.
 
 - [ ] **SPF** — Add a TXT record to your sending domain's DNS:
   ```
@@ -122,7 +122,7 @@ Use separate env files for each:
 
 1. Push the repository to GitHub.
 2. In the [Vercel dashboard](https://vercel.com/), click *Add New → Project* and import the GitHub repository.
-3. Under *Settings → Environment Variables*, add every variable from `.env.local.example` with production values.
+3. Under *Settings → Environment Variables*, add the Supabase variables from `.env.local.example` with production values. Add optional email and monitoring variables only if those services are enabled.
    - Set `NEXT_PUBLIC_APP_URL` to your production domain (e.g. `https://parkrun.yourdomain.com`).
    - Scope `SUPABASE_SERVICE_ROLE_KEY` to *Production* only — do not add it to Preview deployments.
 4. Cron jobs are configured in `vercel.json` and run automatically once the project is deployed. Vercel Cron requires a Pro plan or above. Verify cron jobs are active under *Settings → Crons* after first deploy.

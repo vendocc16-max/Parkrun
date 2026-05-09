@@ -73,6 +73,10 @@ export async function sendConfirmationEmail(params: {
   registrations: Array<{ participant: Participant; registration: Registration }>
 }): Promise<SendResult> {
   try {
+    if (!resend) {
+      return { success: false, error: 'RESEND_API_KEY is not set' }
+    }
+
     const { to, guardianFirstName, session, registrations } = params
     const template = confirmationTemplate({ guardianFirstName, session, registrations })
 
@@ -160,6 +164,10 @@ export async function sendWaitlistPromotionEmail(params: {
   participant: Participant
 }): Promise<SendResult> {
   try {
+    if (!resend) {
+      return { success: false, error: 'RESEND_API_KEY is not set' }
+    }
+
     const { to, guardianFirstName, session, registration, participant } = params
     const template = waitlistPromotionTemplate({
       guardianFirstName,
@@ -250,6 +258,10 @@ export async function sendCancellationEmail(params: {
   cancelledByOrganizer?: boolean
 }): Promise<SendResult> {
   try {
+    if (!resend) {
+      return { success: false, error: 'RESEND_API_KEY is not set' }
+    }
+
     const { to, guardianFirstName, session, registration, cancelledByOrganizer } = params
     const template = cancellationTemplate({
       guardianFirstName,
@@ -339,6 +351,15 @@ export async function sendBulkReminder(params: {
   recipients: Array<{ email: string; firstName: string; registrationNumber: string }>
 }): Promise<BulkSendResult> {
   const { subject, body, session, recipients } = params
+
+  if (!resend) {
+    return {
+      sent: 0,
+      failed: recipients.length,
+      results: recipients.map((recipient) => ({ email: recipient.email, success: false })),
+    }
+  }
+
   const results: BulkSendResult['results'] = []
 
   for (const recipient of recipients) {

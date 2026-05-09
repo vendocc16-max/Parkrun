@@ -22,20 +22,20 @@ export default async function EditSessionPage({ params }: Props) {
     <div className="max-w-2xl">
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-1">
-          <Link href="/admin/sessions" className="text-sm text-gray-500 hover:text-gray-700">
+          <Link href="/admin/sessions" className="text-sm text-park-muted hover:text-park-dark">
             Sessions
           </Link>
-          <span className="text-gray-300">/</span>
+          <span className="text-park-border">/</span>
           <Link
             href={`/admin/sessions/${id}`}
-            className="text-sm text-gray-500 hover:text-gray-700"
+            className="text-sm text-park-muted hover:text-park-dark"
           >
             {session.title}
           </Link>
-          <span className="text-gray-300">/</span>
-          <span className="text-sm text-gray-700">Edit</span>
+          <span className="text-park-border">/</span>
+          <span className="text-sm text-park-dark">Edit</span>
         </div>
-        <h1 className="text-2xl font-bold text-gray-900">Edit session</h1>
+        <h1 className="text-2xl font-semibold text-park-dark">Edit session</h1>
       </div>
 
       <EditSessionForm session={session} />

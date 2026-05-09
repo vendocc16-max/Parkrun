@@ -34,12 +34,10 @@ export default async function SessionsPage() {
 
   const sessions = (sessionsData ?? []) as Session[]
 
-  if (error) {
-    console.error('Failed to fetch sessions:', error)
-  }
+  const fetchFailed = Boolean(error)
 
   const confirmedCounts = await Promise.all(
-    sessions.map(async (s) => {
+    fetchFailed ? [] : sessions.map(async (s) => {
       const { data } = await supabase.rpc('get_session_confirmed_count', {
         p_session_id: s.id,
       })
@@ -50,15 +48,15 @@ export default async function SessionsPage() {
   return (
     <div className="min-h-screen bg-park-cream">
       {/* Page header */}
-      <div className="bg-park-dark py-14 px-4">
+      <div className="surface-grid border-b border-park-border bg-park-cream px-4 py-14">
         <div className="mx-auto max-w-5xl">
-          <p className="font-display text-park-lime uppercase tracking-[0.2em] text-xs font-semibold mb-3">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-park-accent">
             Anmäl dig idag
           </p>
-          <h1 className="font-display font-extrabold text-4xl sm:text-5xl text-park-white uppercase leading-tight">
+          <h1 className="text-4xl font-semibold tracking-tight text-park-dark sm:text-5xl">
             Kommande evenemang
           </h1>
-          <p className="mt-3 text-park-muted text-sm max-w-md">
+          <p className="mt-3 max-w-md text-sm leading-6 text-park-muted">
             Bläddra bland tillgängliga Parkrun-evenemang och anmäl din grupp.
           </p>
         </div>
@@ -66,12 +64,24 @@ export default async function SessionsPage() {
 
       {/* Sessions list */}
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12">
-        {sessions.length === 0 ? (
-          <div className="rounded-2xl border border-park-border bg-park-white px-8 py-20 text-center">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-park-cream">
-              <span className="text-3xl">🏃</span>
+        {fetchFailed ? (
+          <div className="hairline-card rounded-lg px-8 py-20 text-center">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-md bg-park-accent-soft">
+              <span className="h-2 w-2 rounded-full bg-park-accent" />
             </div>
-            <p className="font-display font-bold text-lg uppercase text-park-dark mb-2">
+            <p className="mb-2 text-lg font-semibold text-park-dark">
+              Evenemang kunde inte hämtas
+            </p>
+            <p className="mx-auto max-w-md text-sm leading-6 text-park-muted">
+              Kontrollera Supabase-konfigurationen och ladda om sidan.
+            </p>
+          </div>
+        ) : sessions.length === 0 ? (
+          <div className="hairline-card rounded-lg px-8 py-20 text-center">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-md bg-park-accent-soft">
+              <span className="h-2 w-2 rounded-full bg-park-accent" />
+            </div>
+            <p className="mb-2 text-lg font-semibold text-park-dark">
               Inga evenemang ännu
             </p>
             <p className="text-sm text-park-muted">
@@ -88,26 +98,26 @@ export default async function SessionsPage() {
               return (
                 <article
                   key={session.id}
-                  className="group flex flex-col sm:flex-row sm:items-center gap-4 rounded-xl bg-park-white border border-park-border hover:border-park-green/40 hover:shadow-md transition-all duration-200 overflow-hidden"
+                  className="group flex flex-col gap-4 overflow-hidden rounded-lg border border-park-border bg-park-white shadow-sm transition-[border-color,box-shadow] duration-200 hover:border-park-green/40 hover:shadow-md sm:flex-row sm:items-center"
                 >
                   {/* Left accent bar */}
                   <div
                     className={`h-1 sm:h-auto sm:w-1.5 sm:self-stretch ${
-                      isFull ? 'bg-park-muted/30' : 'bg-park-lime'
+                      isFull ? 'bg-park-muted/30' : 'bg-park-green'
                     }`}
                   />
 
                   <div className="flex-1 min-w-0 px-5 py-5 sm:py-5 sm:pl-0">
                     <div className="flex flex-wrap items-center gap-2 mb-1">
-                      <h2 className="font-display font-bold text-xl uppercase text-park-dark leading-tight">
+                      <h2 className="text-lg font-semibold leading-tight tracking-tight text-park-dark">
                         {session.title}
                       </h2>
                       {isFull ? (
-                        <span className="rounded-full bg-park-muted/15 px-2.5 py-0.5 text-xs font-semibold text-park-muted uppercase tracking-wide">
+                        <span className="rounded-full bg-park-muted/10 px-2.5 py-0.5 text-xs font-semibold text-park-muted">
                           Fullbokad
                         </span>
                       ) : (
-                        <span className="rounded-full bg-park-lime/20 px-2.5 py-0.5 text-xs font-semibold text-park-green uppercase tracking-wide">
+                        <span className="rounded-full bg-park-lime px-2.5 py-0.5 text-xs font-semibold text-park-green">
                           Öppen
                         </span>
                       )}
@@ -140,10 +150,10 @@ export default async function SessionsPage() {
                   <div className="px-5 pb-5 sm:py-5 sm:pr-5 sm:pl-0 shrink-0">
                     <Link
                       href={`/sessions/${session.slug}`}
-                      className={`inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors ${
+                      className={`inline-flex items-center gap-1.5 rounded-md px-4 py-2.5 text-sm font-semibold transition-[background-color,border-color,color,box-shadow] ${
                         isFull
-                          ? 'bg-park-cream text-park-muted hover:bg-park-border'
-                          : 'bg-park-dark text-park-white hover:bg-park-green'
+                          ? 'border border-park-border bg-park-cream text-park-muted hover:bg-park-white'
+                          : 'bg-park-dark text-park-white shadow-sm hover:bg-park-green'
                       }`}
                     >
                       {isFull ? 'Gå med i väntelista' : 'Visa & anmäl'}

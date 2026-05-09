@@ -19,6 +19,11 @@ export async function sendConfirmationEmail({
   registrationNumbers,
   status,
 }: SendConfirmationParams) {
+  if (!resend) {
+    console.warn('RESEND_API_KEY is not set; skipping confirmation email')
+    return { data: null, error: null }
+  }
+
   const formattedDate = new Date(eventDate).toLocaleDateString('en-GB', {
     weekday: 'long',
     year: 'numeric',

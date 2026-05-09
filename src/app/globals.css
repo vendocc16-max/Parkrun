@@ -1,21 +1,34 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f5f1ea;
-  --foreground: #141c14;
+  --background: #fbfaf7;
+  --foreground: #171a18;
+  --color-park-dark: #171a18;
+  --color-park-green: #2f6f55;
+  --color-park-lime: #d6eee4;
+  --color-park-cream: #fbfaf7;
+  --color-park-muted: #69716c;
+  --color-park-border: #e3dfd7;
+  --color-park-white: #ffffff;
+  --color-park-accent: #256f8f;
+  --color-park-accent-soft: #e7f4f6;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  --color-park-dark:   #141c14;
-  --color-park-green:  #1d5c3e;
-  --color-park-lime:   #c6e832;
-  --color-park-cream:  #f5f1ea;
-  --color-park-muted:  #5c6b5e;
-  --color-park-border: #ddd8cc;
+  --color-park-dark:   #171a18;
+  --color-park-green:  #2f6f55;
+  --color-park-lime:   #d6eee4;
+  --color-park-cream:  #fbfaf7;
+  --color-park-muted:  #69716c;
+  --color-park-border: #e3dfd7;
   --color-park-white:  #ffffff;
+  --color-park-accent: #256f8f;
+  --color-park-accent-soft: #e7f4f6;
 
   --font-display: var(--font-barlow-condensed);
   --font-sans:    var(--font-dm-sans);
@@ -25,4 +38,82 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-dm-sans), system-ui, sans-serif;
+}
+
+::selection {
+  background: #d6eee4;
+  color: #171a18;
+}
+
+:focus-visible {
+  outline: 2px solid #256f8f;
+  outline-offset: 3px;
+}
+
+a[href],
+button,
+[role="button"],
+input,
+select,
+textarea {
+  transition-property: background-color, border-color, color, box-shadow, opacity, transform;
+  transition-duration: 160ms;
+  transition-timing-function: var(--ease-out);
+}
+
+a[href],
+button,
+[role="button"] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a[href]:active,
+button:active,
+[role="button"]:active {
+  transform: scale(0.97);
+}
+
+button:disabled:active {
+  transform: none;
+}
+
+.surface-grid {
+  background-image:
+    linear-gradient(to right, rgba(23, 26, 24, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(23, 26, 24, 0.055) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+.hairline-card {
+  border: 1px solid var(--color-park-border);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 1px 0 rgba(23, 26, 24, 0.04);
+}
+
+.admin-shell {
+  background:
+    linear-gradient(180deg, rgba(231, 244, 246, 0.45), transparent 260px),
+    var(--background);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a[href]:hover,
+  button:hover,
+  [role="button"]:hover {
+    transition-timing-function: var(--ease-out);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+
+  a[href]:active,
+  button:active,
+  [role="button"]:active {
+    transform: none;
+  }
 }

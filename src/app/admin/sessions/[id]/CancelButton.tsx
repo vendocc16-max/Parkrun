@@ -15,7 +15,7 @@ export function CancelButton({
   const [cancelled, setCancelled] = useState(false)
 
   if (currentStatus === 'cancelled' || cancelled) {
-    return <span className="text-xs text-gray-400">Cancelled</span>
+    return <span className="text-xs text-park-muted/70">Cancelled</span>
   }
 
   const handleCancel = () => {

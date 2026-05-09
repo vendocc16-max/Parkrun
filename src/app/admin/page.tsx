@@ -16,11 +16,11 @@ type DashboardRegistration = {
 }
 
 const STATUS_STYLES: Record<RegistrationStatus, string> = {
-  confirmed: 'bg-green-100 text-green-700',
+  confirmed: 'bg-park-lime text-park-green',
   cancelled: 'bg-red-100 text-red-700',
   waitlisted: 'bg-yellow-100 text-yellow-700',
   duplicate_flagged: 'bg-orange-100 text-orange-700',
-  blocked: 'bg-gray-100 text-gray-600',
+  blocked: 'bg-park-cream text-park-muted',
 }
 
 export default async function AdminDashboard() {
@@ -70,16 +70,16 @@ export default async function AdminDashboard() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-500 mt-1">Welcome to the Parkrun organiser portal.</p>
+        <h1 className="text-2xl font-semibold text-park-dark">Dashboard</h1>
+        <p className="text-park-muted mt-1">Welcome to the Parkrun organiser portal.</p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
         {stats.map(({ label, value }) => (
-          <div key={label} className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-            <p className="text-sm text-gray-500">{label}</p>
-            <p className="text-3xl font-bold text-gray-900 mt-1">{value}</p>
+          <div key={label} className="rounded-lg border border-park-border bg-park-white p-6 shadow-sm">
+            <p className="text-sm text-park-muted">{label}</p>
+            <p className="text-3xl font-semibold text-park-dark mt-1">{value}</p>
           </div>
         ))}
       </div>
@@ -88,13 +88,13 @@ export default async function AdminDashboard() {
       <div className="flex gap-3 mb-10">
         <Link
           href="/admin/sessions/new"
-          className="rounded-md bg-green-700 px-4 py-2 text-sm font-semibold text-white hover:bg-green-800 transition-colors"
+          className="rounded-md bg-park-green px-4 py-2 text-sm font-semibold text-white hover:bg-park-dark transition-[background-color,border-color,color,box-shadow,opacity]"
         >
           + New session
         </Link>
         <Link
           href="/admin/messages"
-          className="rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+          className="rounded-md border border-park-border px-4 py-2 text-sm font-semibold text-park-dark hover:bg-park-cream transition-[background-color,border-color,color,box-shadow,opacity]"
         >
           Send message
         </Link>
@@ -102,41 +102,41 @@ export default async function AdminDashboard() {
 
       {/* Recent registrations */}
       <div>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent registrations</h2>
-        <div className="rounded-lg border border-gray-200 bg-white overflow-hidden shadow-sm">
+        <h2 className="text-lg font-semibold tracking-tight text-park-dark mb-4">Recent registrations</h2>
+        <div className="rounded-lg border border-park-border bg-park-white overflow-hidden shadow-sm">
           {recentRegistrations.length === 0 ? (
-            <p className="px-6 py-8 text-sm text-gray-500 text-center">No registrations yet.</p>
+            <p className="px-6 py-8 text-sm text-park-muted text-center">No registrations yet.</p>
           ) : (
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="bg-park-cream border-b border-park-border">
                 <tr>
-                  <th className="px-4 py-3 text-left font-medium text-gray-600">Reg #</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-600">Participant</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-600">Session</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-600">Status</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-600">Registered</th>
+                  <th className="px-4 py-3 text-left font-medium text-park-muted">Reg #</th>
+                  <th className="px-4 py-3 text-left font-medium text-park-muted">Participant</th>
+                  <th className="px-4 py-3 text-left font-medium text-park-muted">Session</th>
+                  <th className="px-4 py-3 text-left font-medium text-park-muted">Status</th>
+                  <th className="px-4 py-3 text-left font-medium text-park-muted">Registered</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-park-border">
                 {recentRegistrations.map((reg) => (
-                  <tr key={reg.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-4 py-3 font-mono text-xs text-gray-600">
+                  <tr key={reg.id} className="hover:bg-park-cream transition-[background-color,border-color,color,box-shadow,opacity]">
+                    <td className="px-4 py-3 font-mono text-xs text-park-muted">
                       {reg.registration_number ?? '—'}
                     </td>
-                    <td className="px-4 py-3 text-gray-900">
+                    <td className="px-4 py-3 text-park-dark">
                       {reg.participants
                         ? `${reg.participants.first_name} ${reg.participants.last_name}`
                         : '—'}
                     </td>
-                    <td className="px-4 py-3 text-gray-600">{reg.sessions?.title ?? '—'}</td>
+                    <td className="px-4 py-3 text-park-muted">{reg.sessions?.title ?? '—'}</td>
                     <td className="px-4 py-3">
                       <span
-                        className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_STYLES[reg.status] ?? 'bg-gray-100 text-gray-600'}`}
+                        className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_STYLES[reg.status] ?? 'bg-park-cream text-park-muted'}`}
                       >
                         {reg.status.replace('_', ' ')}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-gray-500">
+                    <td className="px-4 py-3 text-park-muted">
                       {new Date(reg.created_at).toLocaleDateString()}
                     </td>
                   </tr>
@@ -146,7 +146,7 @@ export default async function AdminDashboard() {
           )}
         </div>
         <div className="mt-3">
-          <Link href="/admin/registrations" className="text-sm text-green-700 hover:underline">
+          <Link href="/admin/registrations" className="text-sm text-park-green hover:underline">
             View all registrations →
           </Link>
         </div>
@@ -154,4 +154,3 @@ export default async function AdminDashboard() {
     </div>
   )
 }
-

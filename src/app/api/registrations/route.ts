@@ -2,7 +2,6 @@ import { headers } from 'next/headers'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { registrationSchema } from '@/lib/validations/registration'
 import { checkRateLimit } from '@/lib/rate-limit'
-import { verifyCaptcha } from '@/lib/captcha'
 import { sendConfirmationEmail } from '@/lib/email/sendConfirmation'
 import type {
   Session,
@@ -43,7 +42,6 @@ export async function POST(request: Request) {
     consentTerms,
     consentPrivacy,
     consentChildRegistration,
-    captchaToken,
   } = parsed.data
 
   // 2. Get client IP
@@ -67,25 +65,6 @@ export async function POST(request: Request) {
         },
       },
     )
-  }
-
-  // 3.5. CAPTCHA verification
-  const isCaptchaEnabled = process.env.CAPTCHA_ENABLED === 'true'
-  if (isCaptchaEnabled) {
-    if (!captchaToken) {
-      return Response.json(
-        { error: 'CAPTCHA verification required.', code: 'CAPTCHA_REQUIRED' },
-        { status: 400 },
-      )
-    }
-
-    const captchaResult = await verifyCaptcha(captchaToken)
-    if (!captchaResult.success) {
-      return Response.json(
-        { error: 'CAPTCHA verification failed. Please try again.', code: 'CAPTCHA_FAILED' },
-        { status: 400 },
-      )
-    }
   }
 
   const adminClient = createAdminClient()

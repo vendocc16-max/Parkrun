@@ -1,153 +1,165 @@
 import Link from 'next/link'
 
+const STEPS = [
+  {
+    step: '01',
+    title: 'Välj en tid',
+    description:
+      'Se kommande pass, plats och tillgängliga platser utan att lämna flödet.',
+  },
+  {
+    step: '02',
+    title: 'Anmäl gruppen',
+    description:
+      'Registrera dig själv och barn i samma lugna formulär med tydliga samtycken.',
+  },
+  {
+    step: '03',
+    title: 'Kom fram redo',
+    description:
+      'Bekräftelsen skickas via e-post med nummer och praktisk information.',
+  },
+]
+
 export default function Home() {
   return (
     <>
-      {/* Hero */}
-      <section className="relative bg-park-dark overflow-hidden">
-        {/* Decorative track oval shapes */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 overflow-hidden"
-        >
-          <div className="absolute -right-32 top-1/2 -translate-y-1/2 h-[640px] w-[640px] rounded-full border border-park-green/25" />
-          <div className="absolute -right-12 top-1/2 -translate-y-1/2 h-[440px] w-[440px] rounded-full border border-park-green/15" />
-          <div className="absolute right-24 top-1/2 -translate-y-1/2 h-[220px] w-[220px] rounded-full border border-park-lime/20" />
-          <div className="absolute bottom-12 right-40 h-2 w-2 rounded-full bg-park-lime/40" />
-          <div className="absolute bottom-20 right-56 h-1.5 w-1.5 rounded-full bg-park-lime/30" />
-          <div className="absolute top-16 right-32 h-2.5 w-2.5 rounded-full bg-park-lime/25" />
-        </div>
-
-        <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+      <section className="surface-grid border-b border-park-border bg-park-cream">
+        <div className="mx-auto grid max-w-6xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8 lg:py-24">
           <div className="max-w-2xl">
-            <p className="font-display text-park-lime uppercase tracking-[0.25em] text-sm font-semibold mb-5">
-              Gratis · Varje vecka · För alla
+            <p className="mb-5 inline-flex rounded-full border border-park-border bg-park-white px-3 py-1 text-xs font-semibold text-park-accent shadow-sm">
+              Gratis varje vecka, öppet för alla
             </p>
-            <h1 className="font-display font-extrabold text-park-white uppercase leading-[0.9] tracking-tight">
-              <span className="block text-6xl sm:text-7xl lg:text-8xl">Ditt nästa</span>
-              <span className="block text-6xl sm:text-7xl lg:text-8xl text-park-lime">parkrun</span>
-              <span className="block text-6xl sm:text-7xl lg:text-8xl">börjar här</span>
+            <h1 className="text-5xl font-semibold leading-[1.02] tracking-tight text-park-dark sm:text-6xl lg:text-7xl">
+              Parkrun-anmälan som känns enkel från första klicket.
             </h1>
-            <p className="mt-8 text-base sm:text-lg text-park-muted leading-relaxed max-w-lg">
-              Bläddra bland kommande evenemang, säkra din plats och ta med hela familjen.
-              Gratis, välkomnande och öppet för alla — bara dyka upp och springa.
+            <p className="mt-6 max-w-xl text-base leading-7 text-park-muted sm:text-lg">
+              Hitta ett kommande 5 km-pass, säkra din plats och få en tydlig bekräftelse.
+              Allt är byggt för att vara lugnt, snabbt och lätt att förstå.
             </p>
-            <div className="mt-10 flex flex-col sm:flex-row gap-3">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/sessions"
-                className="inline-flex items-center justify-center rounded-full bg-park-lime px-8 py-3.5 text-park-dark font-semibold text-base hover:bg-white transition-colors"
+                className="inline-flex items-center justify-center rounded-md bg-park-dark px-5 py-3 text-sm font-semibold text-park-white shadow-sm transition-[background-color,color,box-shadow] hover:bg-park-green"
               >
-                Visa evenemang →
+                Visa evenemang
+                <span aria-hidden="true" className="ml-2">
+                  →
+                </span>
               </Link>
               <a
                 href="#how-it-works"
-                className="inline-flex items-center justify-center rounded-full border border-white/20 px-8 py-3.5 text-park-white font-semibold text-base hover:bg-white/10 transition-colors"
+                className="inline-flex items-center justify-center rounded-md border border-park-border bg-park-white px-5 py-3 text-sm font-semibold text-park-dark shadow-sm transition-[background-color,border-color,color,box-shadow] hover:border-park-green/35 hover:bg-park-lime"
               >
                 Hur det fungerar
               </a>
             </div>
           </div>
+
+          <div className="hairline-card relative overflow-hidden rounded-lg p-5">
+            <div className="absolute right-4 top-4 h-2 w-2 rounded-full bg-park-accent" />
+            <div className="mb-8 flex items-center justify-between border-b border-park-border pb-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-park-muted">
+                  Nästa pass
+                </p>
+                <p className="mt-1 text-lg font-semibold text-park-dark">Lördag 09:00</p>
+              </div>
+              <span className="rounded-full bg-park-accent-soft px-3 py-1 text-xs font-semibold text-park-accent">
+                5 km
+              </span>
+            </div>
+            <div className="space-y-4">
+              {[
+                ['Platser kvar', '18'],
+                ['Väntelista', 'Aktiv vid fullbokat'],
+                ['Bekräftelse', 'Direkt via e-post'],
+              ].map(([label, value]) => (
+                <div key={label} className="flex items-center justify-between gap-4">
+                  <span className="text-sm text-park-muted">{label}</span>
+                  <span className="text-sm font-semibold text-park-dark">{value}</span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-8 rounded-md border border-park-border bg-park-cream p-4">
+              <div className="mb-3 flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-park-green" />
+                <p className="text-sm font-semibold text-park-dark">Anmälan öppen</p>
+              </div>
+              <div className="h-2 overflow-hidden rounded-full bg-park-border">
+                <div className="h-full w-2/3 rounded-full bg-park-green" />
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Stats strip */}
-      <section className="bg-park-green py-5 px-4">
-        <div className="mx-auto max-w-6xl flex flex-wrap justify-center gap-x-12 gap-y-2 text-center">
+      <section className="border-b border-park-border bg-park-white px-4 py-5">
+        <div className="mx-auto grid max-w-6xl gap-4 text-sm sm:grid-cols-3">
           {[
-            { value: '5 km', label: 'Varje gång' },
-            { value: '100%', label: 'Gratis' },
-            { value: 'Alla åldrar', label: 'Välkomna' },
-          ].map(({ value, label }) => (
-            <div key={label} className="flex items-center gap-2.5">
-              <span className="font-display font-bold text-park-lime text-2xl uppercase">{value}</span>
-              <span className="text-white/60 text-sm">{label}</span>
+            ['5 km', 'Samma distans varje gång'],
+            ['100%', 'Gratis att delta'],
+            ['Alla', 'Åldrar och tempo välkomna'],
+          ].map(([value, label]) => (
+            <div key={label} className="flex items-baseline gap-3">
+              <span className="text-xl font-semibold tracking-tight text-park-dark">{value}</span>
+              <span className="text-park-muted">{label}</span>
             </div>
           ))}
         </div>
       </section>
 
-      {/* How it works */}
-      <section id="how-it-works" className="py-24 px-4 bg-park-cream">
+      <section id="how-it-works" className="bg-park-cream px-4 py-20">
         <div className="mx-auto max-w-6xl">
-          <div className="mb-14">
-            <p className="font-display text-park-green uppercase tracking-[0.2em] text-sm font-semibold mb-3">
-              Enkelt att komma igång
+          <div className="mb-10 max-w-xl">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-park-accent">
+              Flödet
             </p>
-            <h2 className="font-display font-bold text-4xl sm:text-5xl text-park-dark uppercase leading-tight">
-              Hur det fungerar
+            <h2 className="text-3xl font-semibold tracking-tight text-park-dark sm:text-4xl">
+              Tre steg, inga distraktioner.
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-            {[
-              {
-                step: '01',
-                title: 'Hitta ett evenemang',
-                description:
-                  'Bläddra bland kommande Parkrun-evenemang och välj ett datum som passar dig.',
-              },
-              {
-                step: '02',
-                title: 'Anmäl din grupp',
-                description:
-                  'Fyll i dina uppgifter och lägg till upp till 5 deltagare — vuxna och barn välkomna.',
-              },
-              {
-                step: '03',
-                title: 'Dyka upp och spring',
-                description:
-                  'Få en bekräftelse via e-post med allt du behöver. Bara dyka upp på dagen!',
-              },
-            ].map(({ step, title, description }) => (
-              <div key={step} className="group">
-                <div className="mb-4">
-                  <span className="font-display font-extrabold text-6xl text-park-border leading-none select-none">
-                    {step}
-                  </span>
-                </div>
-                <div className="h-px w-12 bg-park-lime mb-4" />
-                <h3 className="font-display font-bold text-xl uppercase text-park-dark mb-2">
-                  {title}
-                </h3>
-                <p className="text-park-muted text-sm leading-relaxed">{description}</p>
+          <div className="grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-park-border bg-park-border sm:grid-cols-3">
+            {STEPS.map(({ step, title, description }) => (
+              <div key={step} className="bg-park-white p-6">
+                <span className="text-xs font-semibold text-park-accent">{step}</span>
+                <h3 className="mt-5 text-base font-semibold text-park-dark">{title}</h3>
+                <p className="mt-2 text-sm leading-6 text-park-muted">{description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Banner */}
-      <section className="bg-park-lime py-16 px-4">
-        <div className="mx-auto max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-6">
+      <section className="border-y border-park-border bg-park-white px-4 py-14">
+        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-5 sm:flex-row sm:items-center">
           <div>
-            <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-park-dark uppercase leading-tight">
-              Redo att springa?
+            <h2 className="text-2xl font-semibold tracking-tight text-park-dark">
+              Redo att hitta nästa pass?
             </h2>
-            <p className="text-park-dark/60 mt-1 text-sm">
-              Platserna tar slut snabbt — anmäl dig tidigt.
+            <p className="mt-1 text-sm text-park-muted">
+              Bläddra bland publicerade evenemang och anmäl din grupp.
             </p>
           </div>
           <Link
             href="/sessions"
-            className="shrink-0 rounded-full bg-park-dark px-8 py-3.5 text-park-white font-semibold text-base hover:bg-park-green transition-colors"
+            className="rounded-md bg-park-green px-5 py-3 text-sm font-semibold text-park-white shadow-sm transition-[background-color,box-shadow] hover:bg-park-dark"
           >
-            Visa evenemang →
+            Visa evenemang
           </Link>
         </div>
       </section>
 
-      {/* Contact */}
-      <section className="py-16 px-4 bg-park-cream border-t border-park-border">
+      <section className="bg-park-cream px-4 py-14">
         <div className="mx-auto max-w-xl text-center">
-          <h2 className="font-display font-bold text-2xl text-park-dark uppercase mb-3">
-            Frågor?
-          </h2>
-          <p className="text-park-muted text-sm mb-6 leading-relaxed">
-            Kontakta din lokala evenemangsarrangör eller hör av dig till oss direkt.
+          <h2 className="text-xl font-semibold tracking-tight text-park-dark">Frågor?</h2>
+          <p className="mt-2 text-sm leading-6 text-park-muted">
+            Kontakta din lokala arrangör eller hör av dig direkt.
           </p>
           <a
             href="mailto:ivantruedson@gmail.com"
-            className="inline-block rounded-full border border-park-border px-6 py-2.5 text-sm font-medium text-park-dark hover:bg-park-white transition-colors"
+            className="mt-5 inline-flex rounded-md border border-park-border bg-park-white px-4 py-2.5 text-sm font-semibold text-park-dark shadow-sm transition-[background-color,border-color,color] hover:border-park-green/35 hover:bg-park-lime"
           >
             Kontakta oss
           </a>

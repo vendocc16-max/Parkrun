@@ -5,8 +5,8 @@ import type { Session, SessionStatus } from '../../../../supabase/types'
 export const metadata = { title: 'Sessions | Parkrun Admin' }
 
 const STATUS_STYLES: Record<SessionStatus, string> = {
-  draft: 'bg-gray-100 text-gray-600',
-  published: 'bg-green-100 text-green-700',
+  draft: 'bg-park-cream text-park-muted',
+  published: 'bg-park-lime text-park-green',
   full: 'bg-blue-100 text-blue-700',
   closed: 'bg-yellow-100 text-yellow-700',
   cancelled: 'bg-red-100 text-red-700',
@@ -43,42 +43,42 @@ export default async function SessionsPage() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Sessions</h1>
-          <p className="text-gray-500 mt-1">{sessionsWithCounts.length} sessions total</p>
+          <h1 className="text-2xl font-semibold text-park-dark">Sessions</h1>
+          <p className="text-park-muted mt-1">{sessionsWithCounts.length} sessions total</p>
         </div>
         <Link
           href="/admin/sessions/new"
-          className="rounded-md bg-green-700 px-4 py-2 text-sm font-semibold text-white hover:bg-green-800 transition-colors"
+          className="rounded-md bg-park-green px-4 py-2 text-sm font-semibold text-white hover:bg-park-dark transition-[background-color,border-color,color,box-shadow,opacity]"
         >
           + New session
         </Link>
       </div>
 
-      <div className="rounded-lg border border-gray-200 bg-white overflow-hidden shadow-sm">
+      <div className="rounded-lg border border-park-border bg-park-white overflow-hidden shadow-sm">
         {sessionsWithCounts.length === 0 ? (
-          <p className="px-6 py-8 text-sm text-gray-500 text-center">
+          <p className="px-6 py-8 text-sm text-park-muted text-center">
             No sessions yet.{' '}
-            <Link href="/admin/sessions/new" className="text-green-700 hover:underline">
+            <Link href="/admin/sessions/new" className="text-park-green hover:underline">
               Create the first one.
             </Link>
           </p>
         ) : (
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead className="bg-park-cream border-b border-park-border">
               <tr>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Title</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Date</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Status</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Registrations</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Waitlist</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Actions</th>
+                <th className="px-4 py-3 text-left font-medium text-park-muted">Title</th>
+                <th className="px-4 py-3 text-left font-medium text-park-muted">Date</th>
+                <th className="px-4 py-3 text-left font-medium text-park-muted">Status</th>
+                <th className="px-4 py-3 text-left font-medium text-park-muted">Registrations</th>
+                <th className="px-4 py-3 text-left font-medium text-park-muted">Waitlist</th>
+                <th className="px-4 py-3 text-left font-medium text-park-muted">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-park-border">
               {sessionsWithCounts.map((s) => (
-                <tr key={s.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-4 py-3 font-medium text-gray-900">{s.title}</td>
-                  <td className="px-4 py-3 text-gray-600">
+                <tr key={s.id} className="hover:bg-park-cream transition-[background-color,border-color,color,box-shadow,opacity]">
+                  <td className="px-4 py-3 font-medium text-park-dark">{s.title}</td>
+                  <td className="px-4 py-3 text-park-muted">
                     {new Date(s.event_date).toLocaleDateString()}
                   </td>
                   <td className="px-4 py-3">
@@ -88,23 +88,23 @@ export default async function SessionsPage() {
                       {s.status}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-gray-600">
+                  <td className="px-4 py-3 text-park-muted">
                     {s.confirmedCount} / {s.capacity}
                   </td>
-                  <td className="px-4 py-3 text-gray-600">
+                  <td className="px-4 py-3 text-park-muted">
                     {s.waitlist_enabled ? s.waitlistCount : '—'}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
                       <Link
                         href={`/admin/sessions/${s.id}`}
-                        className="text-green-700 hover:underline text-xs font-medium"
+                        className="text-park-green hover:underline text-xs font-medium"
                       >
                         View
                       </Link>
                       <Link
                         href={`/admin/sessions/${s.id}/edit`}
-                        className="text-gray-500 hover:underline text-xs font-medium"
+                        className="text-park-muted hover:underline text-xs font-medium"
                       >
                         Edit
                       </Link>

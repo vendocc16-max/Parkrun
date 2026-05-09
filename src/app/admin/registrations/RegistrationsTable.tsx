@@ -15,11 +15,11 @@ type RowData = {
 }
 
 const STATUS_STYLES: Record<RegistrationStatus, string> = {
-  confirmed: 'bg-green-100 text-green-700',
+  confirmed: 'bg-park-lime text-park-green',
   cancelled: 'bg-red-100 text-red-700',
   waitlisted: 'bg-yellow-100 text-yellow-700',
   duplicate_flagged: 'bg-orange-100 text-orange-700',
-  blocked: 'bg-gray-100 text-gray-600',
+  blocked: 'bg-park-cream text-park-muted',
 }
 
 export function RegistrationsTable({ rows }: { rows: RowData[] }) {
@@ -76,13 +76,13 @@ export function RegistrationsTable({ rows }: { rows: RowData[] }) {
           <button
             onClick={handleBulkCancel}
             disabled={isPending}
-            className="rounded-md bg-red-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-700 transition-colors disabled:opacity-60"
+            className="rounded-md bg-red-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-700 transition-[background-color,border-color,color,box-shadow,opacity] disabled:opacity-60"
           >
             {isPending ? 'Cancelling…' : 'Cancel selected'}
           </button>
           <button
             onClick={() => setSelected(new Set())}
-            className="text-xs text-gray-500 hover:underline"
+            className="text-xs text-park-muted hover:underline"
           >
             Clear
           </button>
@@ -95,41 +95,41 @@ export function RegistrationsTable({ rows }: { rows: RowData[] }) {
         </div>
       )}
       {successMsg && (
-        <div className="mb-4 rounded-md bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">
+        <div className="mb-4 rounded-md bg-park-lime border border-park-green/20 px-4 py-3 text-sm text-park-green">
           {successMsg}
         </div>
       )}
 
-      <div className="rounded-lg border border-gray-200 bg-white overflow-hidden shadow-sm">
+      <div className="rounded-lg border border-park-border bg-park-white overflow-hidden shadow-sm">
         {rows.length === 0 ? (
-          <p className="px-6 py-8 text-sm text-gray-500 text-center">
+          <p className="px-6 py-8 text-sm text-park-muted text-center">
             No registrations match your filters.
           </p>
         ) : (
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead className="bg-park-cream border-b border-park-border">
               <tr>
                 <th className="px-4 py-3">
                   <input
                     type="checkbox"
                     checked={allSelected}
                     onChange={toggleAll}
-                    className="h-4 w-4 rounded border-gray-300 text-green-700 focus:ring-green-600"
+                    className="h-4 w-4 rounded border-park-border text-park-green focus:ring-park-green/20"
                   />
                 </th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Reg #</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Participant</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Guardian email</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Session</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Status</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Registered</th>
+                <th className="px-4 py-3 text-left font-medium text-park-muted">Reg #</th>
+                <th className="px-4 py-3 text-left font-medium text-park-muted">Participant</th>
+                <th className="px-4 py-3 text-left font-medium text-park-muted">Guardian email</th>
+                <th className="px-4 py-3 text-left font-medium text-park-muted">Session</th>
+                <th className="px-4 py-3 text-left font-medium text-park-muted">Status</th>
+                <th className="px-4 py-3 text-left font-medium text-park-muted">Registered</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-park-border">
               {rows.map((reg) => (
                 <tr
                   key={reg.id}
-                  className={`hover:bg-gray-50 transition-colors ${selected.has(reg.id) ? 'bg-yellow-50' : ''}`}
+                  className={`hover:bg-park-cream transition-[background-color,border-color,color,box-shadow,opacity] ${selected.has(reg.id) ? 'bg-yellow-50' : ''}`}
                 >
                   <td className="px-4 py-3">
                     {reg.status !== 'cancelled' && (
@@ -137,20 +137,20 @@ export function RegistrationsTable({ rows }: { rows: RowData[] }) {
                         type="checkbox"
                         checked={selected.has(reg.id)}
                         onChange={() => toggle(reg.id)}
-                        className="h-4 w-4 rounded border-gray-300 text-green-700 focus:ring-green-600"
+                        className="h-4 w-4 rounded border-park-border text-park-green focus:ring-park-green/20"
                       />
                     )}
                   </td>
-                  <td className="px-4 py-3 font-mono text-xs text-gray-600">
+                  <td className="px-4 py-3 font-mono text-xs text-park-muted">
                     {reg.registration_number ?? '—'}
                   </td>
-                  <td className="px-4 py-3 text-gray-900">
+                  <td className="px-4 py-3 text-park-dark">
                     {reg.participants
                       ? `${reg.participants.first_name} ${reg.participants.last_name}`
                       : '—'}
                   </td>
-                  <td className="px-4 py-3 text-gray-600">{reg.guardians?.email ?? '—'}</td>
-                  <td className="px-4 py-3 text-gray-600">{reg.sessions?.title ?? '—'}</td>
+                  <td className="px-4 py-3 text-park-muted">{reg.guardians?.email ?? '—'}</td>
+                  <td className="px-4 py-3 text-park-muted">{reg.sessions?.title ?? '—'}</td>
                   <td className="px-4 py-3">
                     <span
                       className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_STYLES[reg.status]}`}
@@ -158,7 +158,7 @@ export function RegistrationsTable({ rows }: { rows: RowData[] }) {
                       {reg.status.replace('_', ' ')}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-gray-500">
+                  <td className="px-4 py-3 text-park-muted">
                     {new Date(reg.created_at).toLocaleDateString()}
                   </td>
                 </tr>

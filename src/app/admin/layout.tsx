@@ -21,30 +21,30 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="admin-shell flex min-h-screen">
       {/* Sidebar */}
-      <aside className="w-60 shrink-0 border-r border-gray-200 bg-white flex flex-col">
-        <div className="px-4 py-5 border-b border-gray-100">
-          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">
+      <aside className="flex w-56 shrink-0 flex-col border-r border-park-border bg-park-white/90">
+        <div className="border-b border-park-border px-4 py-4">
+          <p className="mb-1 text-xs font-semibold uppercase tracking-[0.18em] text-park-muted">
             Organiser
           </p>
-          <p className="text-xs text-gray-500 truncate">{user.email}</p>
+          <p className="truncate text-xs text-park-muted">{user.email}</p>
         </div>
-        <nav className="flex-1 px-3 py-4 space-y-0.5 text-sm font-medium">
+        <nav className="flex-1 space-y-0.5 px-2 py-3 text-sm font-medium">
           {NAV_LINKS.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
-              className="flex items-center rounded-md px-3 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
+              className="flex items-center rounded-md px-3 py-2 text-park-muted transition-[background-color,color] hover:bg-park-lime hover:text-park-dark"
             >
               {label}
             </Link>
           ))}
         </nav>
-        <div className="px-3 py-4 border-t border-gray-100">
+        <div className="border-t border-park-border px-2 py-3">
           <a
             href="/auth/logout"
-            className="flex items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 transition-colors"
+            className="flex items-center rounded-md px-3 py-2 text-sm text-park-muted transition-[background-color,color] hover:bg-park-lime hover:text-park-dark"
           >
             Sign out
           </a>
@@ -52,8 +52,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       </aside>
 
       {/* Main content */}
-      <div className="flex-1 overflow-auto px-8 py-8">{children}</div>
+      <div className="flex-1 overflow-auto px-6 py-6 lg:px-8">{children}</div>
     </div>
   )
 }
-

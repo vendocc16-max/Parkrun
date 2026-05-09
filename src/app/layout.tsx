@@ -35,29 +35,29 @@ export default function RootLayout({
         <SentryClientInit />
 
         {/* Navigation */}
-        <header className="sticky top-0 z-50 bg-park-white/95 backdrop-blur-sm border-b border-park-border">
-          <nav className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
+        <header className="sticky top-0 z-50 border-b border-park-border bg-park-white/90 backdrop-blur-md">
+          <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
             <Link href="/" className="flex items-center gap-2.5 group">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-park-green text-park-lime font-display font-bold text-sm tracking-tight">
+              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-park-dark text-park-lime font-sans text-xs font-semibold tracking-tight shadow-sm">
                 P
               </span>
-              <span className="font-display font-bold text-xl uppercase tracking-wide text-park-dark">
+              <span className="text-sm font-semibold tracking-tight text-park-dark">
                 Parkrun
               </span>
             </Link>
 
-            <div className="flex items-center gap-5 text-sm font-medium">
+            <div className="flex items-center gap-2 text-sm font-medium sm:gap-5">
               <Link
                 href="/sessions"
-                className="text-park-muted hover:text-park-dark transition-colors"
+                className="text-park-muted transition-colors hover:text-park-dark"
               >
                 Evenemang
               </Link>
               <Link
                 href="/admin"
-                className="rounded-full bg-park-dark px-5 py-2 text-park-white text-sm font-semibold hover:bg-park-green transition-colors"
+                className="rounded-md border border-park-border bg-park-white px-3 py-2 text-xs font-semibold text-park-dark shadow-sm transition-[background-color,border-color,color,box-shadow] hover:border-park-green/35 hover:bg-park-lime sm:px-4 sm:text-sm"
               >
-                Arrangörsinloggning
+                Arrangör
               </Link>
             </div>
           </nav>
@@ -67,15 +67,15 @@ export default function RootLayout({
 
         {/* Footer */}
         <footer className="border-t border-park-border bg-park-white">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <p className="font-display text-sm uppercase tracking-widest text-park-muted">
+          <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-4 px-4 py-8 sm:flex-row sm:items-center sm:px-6 lg:px-8">
+            <p className="text-xs font-medium text-park-muted">
               © {new Date().getFullYear()} Parkrun Anmälan
             </p>
             <div className="flex gap-6 text-sm text-park-muted">
-              <Link href="/privacy" className="hover:text-park-dark transition-colors">
+              <Link href="/privacy" className="transition-colors hover:text-park-dark">
                 Integritetspolicy
               </Link>
-              <Link href="/terms" className="hover:text-park-dark transition-colors">
+              <Link href="/terms" className="transition-colors hover:text-park-dark">
                 Användarvillkor
               </Link>
             </div>

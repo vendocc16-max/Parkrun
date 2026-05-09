@@ -75,37 +75,37 @@ export default async function SessionDetailPage({ params }: Props) {
   return (
     <div className="min-h-screen bg-park-cream">
       {/* Session hero header */}
-      <div className="bg-park-dark px-4 pt-10 pb-14">
+      <div className="surface-grid border-b border-park-border bg-park-cream px-4 pb-14 pt-10">
         <div className="mx-auto max-w-3xl">
           <Link
             href="/sessions"
-            className="inline-flex items-center gap-1.5 text-park-muted hover:text-park-lime transition-colors text-sm mb-6"
+            className="mb-6 inline-flex items-center gap-1.5 text-sm text-park-muted transition-colors hover:text-park-dark"
           >
             <span aria-hidden="true">←</span> Alla evenemang
           </Link>
 
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <h1 className="font-display font-extrabold text-4xl sm:text-5xl text-park-white uppercase leading-tight">
+              <h1 className="text-4xl font-semibold leading-tight tracking-tight text-park-dark sm:text-5xl">
                 {session.title}
               </h1>
             </div>
             <div className="flex gap-2 pt-1">
               {session.status === 'full' ? (
-                <span className="rounded-full bg-park-muted/20 px-3 py-1 text-xs font-semibold text-park-muted uppercase tracking-wide">
+                <span className="rounded-full bg-park-muted/10 px-3 py-1 text-xs font-semibold text-park-muted">
                   Fullbokad
                 </span>
               ) : session.status === 'closed' ? (
-                <span className="rounded-full bg-park-muted/20 px-3 py-1 text-xs font-semibold text-park-muted uppercase tracking-wide">
+                <span className="rounded-full bg-park-muted/10 px-3 py-1 text-xs font-semibold text-park-muted">
                   Stängd
                 </span>
               ) : (
-                <span className="rounded-full bg-park-lime/20 px-3 py-1 text-xs font-semibold text-park-lime uppercase tracking-wide">
+                <span className="rounded-full bg-park-lime px-3 py-1 text-xs font-semibold text-park-green">
                   Öppen
                 </span>
               )}
               {session.status === 'full' && session.waitlist_enabled && (
-                <span className="rounded-full bg-amber-400/20 px-3 py-1 text-xs font-semibold text-amber-300 uppercase tracking-wide">
+                <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
                   Väntelista
                 </span>
               )}
@@ -113,7 +113,7 @@ export default async function SessionDetailPage({ params }: Props) {
           </div>
 
           {session.description && (
-            <p className="mt-4 text-park-muted text-sm leading-relaxed max-w-xl">
+            <p className="mt-4 max-w-xl text-sm leading-6 text-park-muted">
               {session.description}
             </p>
           )}
@@ -123,7 +123,7 @@ export default async function SessionDetailPage({ params }: Props) {
       {/* Main content */}
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 -mt-6 pb-16">
         {/* Info card */}
-        <div className="rounded-xl bg-park-white border border-park-border shadow-sm overflow-hidden mb-5">
+        <div className="mb-5 overflow-hidden rounded-lg border border-park-border bg-park-white shadow-sm">
           <dl className="divide-y divide-park-border">
             <div className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
               <dt className="text-xs font-semibold text-park-muted uppercase tracking-wider pt-0.5">
@@ -200,8 +200,8 @@ export default async function SessionDetailPage({ params }: Props) {
 
         {/* Notes */}
         {session.notes && (
-          <div className="rounded-xl bg-park-white border border-park-border p-6 mb-5">
-            <h2 className="font-display font-bold text-sm uppercase tracking-wider text-park-muted mb-3">
+        <div className="mb-5 rounded-lg border border-park-border bg-park-white p-6">
+            <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-park-muted">
               Anteckningar
             </h2>
             <p className="text-sm text-park-dark leading-relaxed">{session.notes}</p>
@@ -210,8 +210,8 @@ export default async function SessionDetailPage({ params }: Props) {
 
         {/* Status banners */}
         {registrationState === 'not_open_yet' && session.registration_opens_at && (
-          <div className="rounded-xl bg-amber-50 border border-amber-200 px-5 py-4 mb-3 flex items-start gap-3">
-            <span className="text-amber-500 text-lg leading-none mt-0.5">⏳</span>
+          <div className="mb-3 flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 px-5 py-4">
+            <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-amber-500" />
             <div>
               <p className="text-sm font-semibold text-amber-800">Anmälan har inte öppnat ännu</p>
               <p className="text-sm text-amber-700 mt-0.5">
@@ -221,8 +221,8 @@ export default async function SessionDetailPage({ params }: Props) {
           </div>
         )}
         {(registrationState === 'closed') && (
-          <div className="rounded-xl bg-gray-50 border border-park-border px-5 py-4 mb-3 flex items-start gap-3">
-            <span className="text-park-muted text-lg leading-none mt-0.5">🔒</span>
+          <div className="mb-3 flex items-start gap-3 rounded-lg border border-park-border bg-park-white px-5 py-4">
+            <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-park-muted" />
             <div>
               <p className="text-sm font-semibold text-park-dark">Anmälan är stängd</p>
               <p className="text-sm text-park-muted mt-0.5">
@@ -232,8 +232,8 @@ export default async function SessionDetailPage({ params }: Props) {
           </div>
         )}
         {registrationState === 'full_no_waitlist' && (
-          <div className="rounded-xl bg-red-50 border border-red-200 px-5 py-4 mb-3 flex items-start gap-3">
-            <span className="text-red-400 text-lg leading-none mt-0.5">🚫</span>
+          <div className="mb-3 flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-5 py-4">
+            <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-red-500" />
             <div>
               <p className="text-sm font-semibold text-red-800">Evenemanget är fullbokat</p>
               <p className="text-sm text-red-700 mt-0.5">
@@ -248,7 +248,7 @@ export default async function SessionDetailPage({ params }: Props) {
           {registrationState === 'open' && (
             <Link
               href={`/sessions/${slug}/register`}
-              className="flex-1 rounded-full bg-park-lime px-6 py-3.5 text-center text-base font-semibold text-park-dark hover:bg-park-green hover:text-park-white transition-colors"
+              className="flex-1 rounded-md bg-park-green px-6 py-3.5 text-center text-base font-semibold text-park-white shadow-sm transition-[background-color,color,box-shadow] hover:bg-park-dark"
             >
               Anmäl dig nu →
             </Link>
@@ -256,24 +256,24 @@ export default async function SessionDetailPage({ params }: Props) {
           {registrationState === 'waitlist' && (
             <Link
               href={`/sessions/${slug}/register`}
-              className="flex-1 rounded-full bg-amber-400 px-6 py-3.5 text-center text-base font-semibold text-park-dark hover:bg-amber-500 transition-colors"
+              className="flex-1 rounded-md bg-amber-400 px-6 py-3.5 text-center text-base font-semibold text-park-dark shadow-sm transition-[background-color,box-shadow] hover:bg-amber-500"
             >
               Gå med i väntelista →
             </Link>
           )}
           {(registrationState === 'closed' || registrationState === 'full_no_waitlist') && (
-            <div className="flex-1 rounded-full bg-park-border px-6 py-3.5 text-center text-base font-semibold text-park-muted cursor-not-allowed">
+            <div className="flex-1 cursor-not-allowed rounded-md bg-park-border px-6 py-3.5 text-center text-base font-semibold text-park-muted">
               Anmälan stängd
             </div>
           )}
           {registrationState === 'not_open_yet' && (
-            <div className="flex-1 rounded-full bg-park-border px-6 py-3.5 text-center text-base font-semibold text-park-muted cursor-not-allowed">
+            <div className="flex-1 cursor-not-allowed rounded-md bg-park-border px-6 py-3.5 text-center text-base font-semibold text-park-muted">
               Anmälan har inte öppnat ännu
             </div>
           )}
           <Link
             href="/sessions"
-            className="flex-1 rounded-full border border-park-border px-6 py-3.5 text-center text-base font-semibold text-park-dark hover:bg-park-white transition-colors"
+            className="flex-1 rounded-md border border-park-border bg-park-white px-6 py-3.5 text-center text-base font-semibold text-park-dark shadow-sm transition-[background-color,border-color,color,box-shadow] hover:border-park-green/35 hover:bg-park-lime"
           >
             Visa fler evenemang
           </Link>

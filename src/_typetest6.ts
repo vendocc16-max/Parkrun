@@ -16,7 +16,7 @@ type ConsentTable = { Row: { id: string }; Insert: { id?: string }; Update: neve
 type T3 = { consents: ConsentTable } extends Record<string, GenericTable> ? 'YES' : 'NO'
 
 // Test if Record<string, never> is the issue with Views
-type T4 = {} extends Record<string, GenericView> ? 'YES' : 'NO'
+type T4 = object extends Record<string, GenericView> ? 'YES' : 'NO'
 
 declare const t1: T1
 declare const t2: T2

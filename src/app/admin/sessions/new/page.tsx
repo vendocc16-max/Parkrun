@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import Link from 'next/link'
 import { createSession, type SessionFormData } from '../actions'
 
 const schema = z.object({
@@ -55,8 +56,8 @@ export default function NewSessionPage() {
   return (
     <div className="max-w-2xl">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">New session</h1>
-        <p className="text-gray-500 mt-1">Create a new Parkrun event session.</p>
+        <h1 className="text-2xl font-semibold text-park-dark">New session</h1>
+        <p className="text-park-muted mt-1">Create a new Parkrun event session.</p>
       </div>
 
       {serverError && (
@@ -67,7 +68,7 @@ export default function NewSessionPage() {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm space-y-6"
+        className="rounded-lg border border-park-border bg-park-white p-6 shadow-sm space-y-6"
       >
         <SessionFormFields register={register} errors={errors} />
 
@@ -75,16 +76,16 @@ export default function NewSessionPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="rounded-md bg-green-700 px-5 py-2 text-sm font-semibold text-white hover:bg-green-800 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+            className="rounded-md bg-park-green px-5 py-2 text-sm font-semibold text-white hover:bg-park-dark transition-[background-color,border-color,color,box-shadow,opacity] disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {isSubmitting ? 'Creating…' : 'Create session'}
           </button>
-          <a
+          <Link
             href="/admin/sessions"
-            className="rounded-md border border-gray-300 px-5 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+            className="rounded-md border border-park-border px-5 py-2 text-sm font-semibold text-park-dark hover:bg-park-cream transition-[background-color,border-color,color,box-shadow,opacity]"
           >
             Cancel
-          </a>
+          </Link>
         </div>
       </form>
     </div>
@@ -107,56 +108,56 @@ function SessionFormFields({
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="sm:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-park-dark mb-1">
             Title <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             {...register('title')}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+            className="w-full rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
           />
           {errors.title && <p className="mt-1 text-xs text-red-600">{errors.title.message}</p>}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-park-dark mb-1">
             Slug <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             {...register('slug')}
             placeholder="morning-5k-city-park"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+            className="w-full rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
           />
           {errors.slug && <p className="mt-1 text-xs text-red-600">{errors.slug.message}</p>}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+          <label className="block text-sm font-medium text-park-dark mb-1">Location</label>
           <input
             type="text"
             {...register('location')}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+            className="w-full rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
           />
         </div>
 
         <div className="sm:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+          <label className="block text-sm font-medium text-park-dark mb-1">Description</label>
           <textarea
             rows={3}
             {...register('description')}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+            className="w-full rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-park-dark mb-1">
             Event date <span className="text-red-500">*</span>
           </label>
           <input
             type="datetime-local"
             {...register('event_date')}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+            className="w-full rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
           />
           {errors.event_date && (
             <p className="mt-1 text-xs text-red-600">{errors.event_date.message}</p>
@@ -164,14 +165,14 @@ function SessionFormFields({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-park-dark mb-1">
             Capacity <span className="text-red-500">*</span>
           </label>
           <input
             type="number"
             min={1}
             {...register('capacity')}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+            className="w-full rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
           />
           {errors.capacity && (
             <p className="mt-1 text-xs text-red-600">{errors.capacity.message}</p>
@@ -179,32 +180,32 @@ function SessionFormFields({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-park-dark mb-1">
             Registration opens
           </label>
           <input
             type="datetime-local"
             {...register('registration_opens_at')}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+            className="w-full rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-park-dark mb-1">
             Registration closes
           </label>
           <input
             type="datetime-local"
             {...register('registration_closes_at')}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+            className="w-full rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+          <label className="block text-sm font-medium text-park-dark mb-1">Status</label>
           <select
             {...register('status')}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+            className="w-full rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
           >
             <option value="draft">Draft</option>
             <option value="published">Published</option>
@@ -219,31 +220,31 @@ function SessionFormFields({
             id="waitlist_enabled"
             type="checkbox"
             {...register('waitlist_enabled')}
-            className="h-4 w-4 rounded border-gray-300 text-green-700 focus:ring-green-600"
+            className="h-4 w-4 rounded border-park-border text-park-green focus:ring-park-green/20"
           />
-          <label htmlFor="waitlist_enabled" className="text-sm font-medium text-gray-700">
+          <label htmlFor="waitlist_enabled" className="text-sm font-medium text-park-dark">
             Enable waitlist
           </label>
         </div>
 
         <div className="sm:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Pricing info</label>
+          <label className="block text-sm font-medium text-park-dark mb-1">Pricing info</label>
           <input
             type="text"
             {...register('pricing_info')}
             placeholder="e.g. Free"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+            className="w-full rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
           />
         </div>
 
         <div className="sm:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-park-dark mb-1">
             Internal notes
           </label>
           <textarea
             rows={2}
             {...register('notes')}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+            className="w-full rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
           />
         </div>
       </div>

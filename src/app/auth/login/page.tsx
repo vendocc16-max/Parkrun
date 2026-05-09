@@ -30,21 +30,14 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-8rem)] bg-park-cream flex items-center justify-center px-4 py-12">
-      {/* Decorative background */}
-      <div aria-hidden="true" className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -top-32 -left-32 h-64 w-64 rounded-full border border-park-green/10" />
-        <div className="absolute -bottom-20 -right-20 h-96 w-96 rounded-full border border-park-green/10" />
-        <div className="absolute bottom-40 right-60 h-48 w-48 rounded-full border border-park-lime/15" />
-      </div>
-
+    <div className="surface-grid flex min-h-[calc(100vh-8rem)] items-center justify-center bg-park-cream px-4 py-12">
       <div className="relative w-full max-w-sm">
         {/* Logo mark */}
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-park-dark">
-            <span className="font-display font-bold text-park-lime text-lg">P</span>
+          <div className="mx-auto mb-3 inline-flex h-10 w-10 items-center justify-center rounded-md bg-park-dark shadow-sm">
+            <span className="text-sm font-semibold text-park-lime">P</span>
           </div>
-          <h1 className="font-display font-bold text-2xl uppercase text-park-dark">
+          <h1 className="text-2xl font-semibold tracking-tight text-park-dark">
             Arrangörsinloggning
           </h1>
           <p className="mt-1 text-sm text-park-muted">
@@ -52,7 +45,7 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <div className="rounded-2xl bg-park-white border border-park-border shadow-sm px-7 py-8">
+        <div className="rounded-lg border border-park-border bg-park-white px-7 py-8 shadow-sm">
           {serverError && (
             <div className="mb-5 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
               {serverError}
@@ -73,7 +66,7 @@ export default function LoginPage() {
                 autoComplete="email"
                 placeholder="you@example.com"
                 {...register('email')}
-                className="w-full rounded-lg border border-park-border bg-park-cream px-3.5 py-2.5 text-sm text-park-dark placeholder:text-park-muted/50 focus:outline-none focus:border-park-green focus:ring-2 focus:ring-park-green/15 transition-colors"
+                className="w-full rounded-md border border-park-border bg-park-cream px-3.5 py-2.5 text-sm text-park-dark transition-[background-color,border-color,color,box-shadow] placeholder:text-park-muted/50 focus:border-park-green focus:outline-none focus:ring-2 focus:ring-park-green/15"
               />
               {errors.email && (
                 <p className="mt-1.5 text-xs text-red-600">{errors.email.message}</p>
@@ -92,7 +85,7 @@ export default function LoginPage() {
                 type="password"
                 autoComplete="current-password"
                 {...register('password')}
-                className="w-full rounded-lg border border-park-border bg-park-cream px-3.5 py-2.5 text-sm text-park-dark focus:outline-none focus:border-park-green focus:ring-2 focus:ring-park-green/15 transition-colors"
+                className="w-full rounded-md border border-park-border bg-park-cream px-3.5 py-2.5 text-sm text-park-dark transition-[background-color,border-color,color,box-shadow] focus:border-park-green focus:outline-none focus:ring-2 focus:ring-park-green/15"
               />
               {errors.password && (
                 <p className="mt-1.5 text-xs text-red-600">{errors.password.message}</p>
@@ -102,7 +95,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full rounded-full bg-park-dark px-4 py-3 text-sm font-semibold text-park-white hover:bg-park-green transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+              className="mt-2 w-full rounded-md bg-park-dark px-4 py-3 text-sm font-semibold text-park-white shadow-sm transition-[background-color,color,box-shadow,opacity] hover:bg-park-green disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isSubmitting ? 'Loggar in…' : 'Logga in →'}
             </button>

@@ -8,12 +8,10 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { registrationSchema } from '@/lib/validations/registration'
 import { REGISTRATION } from '@/lib/config/rules'
-import TurnstileWidget from '@/components/TurnstileWidget'
 
 interface Props {
   sessionId: string
   sessionSlug: string
-  sessionTitle: string
   isWaitlist: boolean
 }
 
@@ -36,7 +34,7 @@ function FieldError({ message }: { message?: string }) {
 }
 
 function inputClass(hasError: boolean) {
-  return `w-full rounded-lg border px-3.5 py-2.5 text-sm bg-park-cream text-park-dark placeholder:text-park-muted/50 focus:outline-none focus:ring-2 transition-colors ${
+  return `w-full rounded-md border px-3.5 py-2.5 text-sm bg-park-cream text-park-dark placeholder:text-park-muted/50 focus:outline-none focus:ring-2 transition-[background-color,border-color,color,box-shadow] ${
     hasError
       ? 'border-red-400 bg-red-50 focus:border-red-400 focus:ring-red-200'
       : 'border-park-border focus:border-park-green focus:ring-park-green/15'
@@ -46,7 +44,7 @@ function inputClass(hasError: boolean) {
 function SectionHeader({ children, sub }: { children: React.ReactNode; sub?: string }) {
   return (
     <div className="mb-5">
-      <h2 className="font-display font-bold text-lg uppercase text-park-dark leading-tight">
+      <h2 className="text-lg font-semibold leading-tight tracking-tight text-park-dark">
         {children}
       </h2>
       {sub && <p className="mt-1 text-sm text-park-muted">{sub}</p>}
@@ -58,13 +56,11 @@ function SectionHeader({ children, sub }: { children: React.ReactNode; sub?: str
 export default function RegistrationForm({
   sessionId,
   sessionSlug,
-  sessionTitle,
   isWaitlist,
 }: Props) {
   const router = useRouter()
   const [serverError, setServerError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -77,7 +73,6 @@ export default function RegistrationForm({
       consentTerms: false,
       consentPrivacy: false,
       consentChildRegistration: false,
-      captchaToken: '',
     },
   })
 
@@ -97,7 +92,7 @@ export default function RegistrationForm({
       const res = await fetch('/api/registrations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...data, captchaToken }),
+        body: JSON.stringify(data),
       })
       const json = await res.json()
       if (!res.ok) {
@@ -129,7 +124,7 @@ export default function RegistrationForm({
 
       <div className="space-y-4">
         {/* Contact details */}
-        <section className="rounded-xl bg-park-white border border-park-border p-6 sm:p-8">
+        <section className="rounded-lg border border-park-border bg-park-white p-6 shadow-sm sm:p-8">
           <SectionHeader sub="Vi skickar din bekräftelse till e-postadressen nedan.">
             Dina kontaktuppgifter
           </SectionHeader>
@@ -204,7 +199,7 @@ export default function RegistrationForm({
         </section>
 
         {/* Participants */}
-        <section className="rounded-xl bg-park-white border border-park-border p-6 sm:p-8">
+        <section className="rounded-lg border border-park-border bg-park-white p-6 shadow-sm sm:p-8">
           <SectionHeader
             sub={`Anmäl dig själv och upp till ${REGISTRATION.MAX_PARTICIPANTS_PER_SUBMISSION - 1} barn i ditt sällskap.`}
           >
@@ -218,15 +213,15 @@ export default function RegistrationForm({
               return (
                 <div
                   key={field.id}
-                  className="rounded-lg border border-park-border bg-park-cream p-4 space-y-4"
+                  className="space-y-4 rounded-md border border-park-border bg-park-cream p-4"
                 >
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
-                      <span className="font-display font-bold text-sm uppercase text-park-dark">
+                      <span className="text-sm font-semibold text-park-dark">
                         {index === 0 ? 'Du (deltagare 1)' : `Barn ${index}`}
                       </span>
                       {isAdded && (
-                        <span className="rounded-full bg-park-green/10 px-2 py-0.5 text-xs font-semibold text-park-green uppercase tracking-wide">
+                        <span className="rounded-full bg-park-lime px-2 py-0.5 text-xs font-semibold text-park-green">
                           Barn
                         </span>
                       )}
@@ -235,7 +230,7 @@ export default function RegistrationForm({
                       <button
                         type="button"
                         onClick={() => remove(index)}
-                        className="text-xs text-red-500 hover:text-red-700 font-medium transition-colors"
+                        className="text-xs font-medium text-red-500 transition-colors hover:text-red-700"
                       >
                         Ta bort
                       </button>
@@ -338,9 +333,9 @@ export default function RegistrationForm({
                   medicalNotes: '',
                 })
               }
-              className="mt-4 flex items-center gap-2 text-sm font-semibold text-park-green hover:text-park-dark transition-colors"
+              className="mt-4 flex items-center gap-2 text-sm font-semibold text-park-green transition-colors hover:text-park-dark"
             >
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-park-lime text-park-dark text-xs font-bold">+</span>
+              <span className="flex h-5 w-5 items-center justify-center rounded-md bg-park-lime text-xs font-bold text-park-dark">+</span>
               Lägg till barn
             </button>
           )}
@@ -350,7 +345,7 @@ export default function RegistrationForm({
         </section>
 
         {/* Consent */}
-        <section className="rounded-xl bg-park-white border border-park-border p-6 sm:p-8">
+        <section className="rounded-lg border border-park-border bg-park-white p-6 shadow-sm sm:p-8">
           <SectionHeader>Samtycke &amp; villkor</SectionHeader>
 
           <div className="space-y-4">
@@ -362,7 +357,7 @@ export default function RegistrationForm({
               />
               <span>
                 Jag godkänner{' '}
-                <Link href="/terms" className="text-park-green underline underline-offset-2 hover:text-park-dark transition-colors">
+                <Link href="/terms" className="text-park-green underline underline-offset-2 transition-colors hover:text-park-dark">
                   användarvillkoren
                 </Link>{' '}
                 <span className="text-red-500">*</span>
@@ -380,7 +375,7 @@ export default function RegistrationForm({
               />
               <span>
                 Jag godkänner{' '}
-                <Link href="/privacy" className="text-park-green underline underline-offset-2 hover:text-park-dark transition-colors">
+                <Link href="/privacy" className="text-park-green underline underline-offset-2 transition-colors hover:text-park-dark">
                   integritetspolicyn
                 </Link>{' '}
                 <span className="text-red-500">*</span>
@@ -418,17 +413,11 @@ export default function RegistrationForm({
           </div>
         )}
 
-        {/* CAPTCHA */}
-        <TurnstileWidget
-          onVerify={(token) => setCaptchaToken(token)}
-          onError={() => setCaptchaToken(null)}
-        />
-
         {/* Submit */}
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-full bg-park-dark px-6 py-4 text-base font-semibold text-park-white hover:bg-park-green transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full rounded-md bg-park-dark px-6 py-4 text-base font-semibold text-park-white shadow-sm transition-[background-color,color,box-shadow,opacity] hover:bg-park-green disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isSubmitting
             ? 'Submitting…'

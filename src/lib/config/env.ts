@@ -1,5 +1,17 @@
 import { z } from 'zod'
 
+const optionalString = z.preprocess((value) => value === '' ? undefined : value, z.string().optional())
+const optionalUrl = z.preprocess((value) => value === '' ? undefined : value, z.string().url().optional())
+const optionalEmail = z.preprocess((value) => value === '' ? undefined : value, z.string().email().optional())
+const optionalSentryEnvironment = z.preprocess(
+  (value) => value === '' ? undefined : value,
+  z.enum(['development', 'staging', 'production']).default('development'),
+)
+const optionalSentryEnabled = z.preprocess(
+  (value) => value === '' ? undefined : value,
+  z.enum(['true', 'false']).default('true'),
+)
+
 const envSchema = z.object({
   // Supabase
   NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
@@ -7,22 +19,22 @@ const envSchema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: z.string(),
 
   // Resend
-  RESEND_API_KEY: z.string(),
-  RESEND_FROM_EMAIL: z.string().email(),
-  NEXT_PUBLIC_APP_URL: z.string().url(),
+  RESEND_API_KEY: optionalString,
+  RESEND_FROM_EMAIL: optionalEmail,
+  NEXT_PUBLIC_APP_URL: optionalUrl,
 
   // API Security
-  INTERNAL_API_SECRET: z.string().min(1),
-  CRON_SECRET: z.string().min(1),
+  INTERNAL_API_SECRET: optionalString,
+  CRON_SECRET: optionalString,
 
   // Sentry
-  SENTRY_DSN: z.string().optional(),
-  NEXT_PUBLIC_SENTRY_DSN: z.string().optional(),
-  SENTRY_AUTH_TOKEN: z.string().optional(),
-  SENTRY_ENVIRONMENT: z.enum(['development', 'staging', 'production']).default('development'),
-  SENTRY_ENABLED: z.enum(['true', 'false']).default('true'),
-  SENTRY_ORG: z.string().optional(),
-  SENTRY_PROJECT: z.string().optional(),
+  SENTRY_DSN: optionalString,
+  NEXT_PUBLIC_SENTRY_DSN: optionalString,
+  SENTRY_AUTH_TOKEN: optionalString,
+  SENTRY_ENVIRONMENT: optionalSentryEnvironment,
+  SENTRY_ENABLED: optionalSentryEnabled,
+  SENTRY_ORG: optionalString,
+  SENTRY_PROJECT: optionalString,
 })
 
 export type Env = z.infer<typeof envSchema>

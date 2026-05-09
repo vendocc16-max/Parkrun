@@ -57,26 +57,25 @@ export default async function RegisterPage({ params }: Props) {
   const isWaitlist = session.status === 'full' && session.waitlist_enabled
 
   return (
-    <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-12">
-      <nav className="mb-6 text-sm text-gray-500">
-        <Link href={`/sessions/${slug}`} className="hover:text-gray-700 transition-colors">
-          ← Back to session
+    <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6 lg:px-8">
+      <nav className="mb-6 text-sm text-park-muted">
+        <Link href={`/sessions/${slug}`} className="transition-colors hover:text-park-dark">
+          ← Tillbaka till evenemang
         </Link>
       </nav>
 
-      <h1 className="text-2xl font-bold text-gray-900 mb-1">
-        {isWaitlist ? 'Join the waitlist' : 'Register for this session'}
+      <h1 className="mb-1 text-3xl font-semibold tracking-tight text-park-dark">
+        {isWaitlist ? 'Gå med i väntelistan' : 'Anmäl dig till evenemanget'}
       </h1>
-      <p className="text-gray-500 mb-2 font-medium text-sm">{session.title}</p>
-      <p className="text-gray-400 mb-8 text-sm">
-        Complete the form below to secure your spot. You can register up to{' '}
-        {5} participants per submission.
+      <p className="mb-2 text-sm font-medium text-park-accent">{session.title}</p>
+      <p className="mb-8 text-sm leading-6 text-park-muted">
+        Fyll i formuläret för att säkra din plats. Du kan anmäla upp till {5}{' '}
+        deltagare per inskick.
       </p>
 
       <RegistrationForm
         sessionId={session.id}
         sessionSlug={slug}
-        sessionTitle={session.title}
         isWaitlist={isWaitlist}
       />
     </div>
