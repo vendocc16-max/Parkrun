@@ -99,7 +99,9 @@ export async function POST(request: Request) {
     )
   }
 
-  // 6. Upsert guardian
+  // 6. Create or update guardian contact details.
+  // The guardians.email column is indexed but not unique, so Postgres upsert
+  // cannot use it as an ON CONFLICT target in production.
   const guardianInsert: InsertGuardian = {
     email: guardian.email,
     first_name: guardian.firstName,
@@ -108,19 +110,51 @@ export async function POST(request: Request) {
     emergency_contact: guardian.emergencyContact || null,
   }
 
-  const { data: guardianData, error: guardianError } = await adminClient
+  const { data: existingGuardianData, error: existingGuardianError } = await adminClient
     .from('guardians')
-    .upsert(guardianInsert, { onConflict: 'email' })
     .select('id, email, first_name, last_name')
-    .single()
+    .eq('email', guardian.email)
+    .order('created_at', { ascending: true })
+    .limit(1)
 
-  const guardianRow = guardianData as Pick<
+  if (existingGuardianError) {
+    console.error('Guardian lookup error:', existingGuardianError)
+    return Response.json(
+      { error: 'Failed to process contact details.', code: 'GUARDIAN_ERROR' },
+      { status: 500 },
+    )
+  }
+
+  const existingGuardianRow = (existingGuardianData?.[0] ?? null) as Pick<
     Guardian,
     'id' | 'email' | 'first_name' | 'last_name'
   > | null
 
-  if (guardianError || !guardianRow) {
-    console.error('Guardian upsert error:', guardianError)
+  const guardianResult = existingGuardianRow
+    ? await adminClient
+        .from('guardians')
+        .update({
+          first_name: guardianInsert.first_name,
+          last_name: guardianInsert.last_name,
+          phone: guardianInsert.phone,
+          emergency_contact: guardianInsert.emergency_contact,
+        })
+        .eq('id', existingGuardianRow.id)
+        .select('id, email, first_name, last_name')
+        .single()
+    : await adminClient
+        .from('guardians')
+        .insert(guardianInsert)
+        .select('id, email, first_name, last_name')
+        .single()
+
+  const guardianRow = guardianResult.data as Pick<
+    Guardian,
+    'id' | 'email' | 'first_name' | 'last_name'
+  > | null
+
+  if (guardianResult.error || !guardianRow) {
+    console.error('Guardian save error:', guardianResult.error)
     return Response.json(
       { error: 'Failed to process contact details.', code: 'GUARDIAN_ERROR' },
       { status: 500 },
