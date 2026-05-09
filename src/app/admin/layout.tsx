@@ -7,6 +7,7 @@ const NAV_LINKS = [
   { href: '/admin/sessions', label: 'Sessions' },
   { href: '/admin/registrations', label: 'Registrations' },
   { href: '/admin/messages', label: 'Send Message' },
+  { href: '/admin/content', label: 'Content' },
   { href: '/admin/settings', label: 'Settings' },
 ]
 

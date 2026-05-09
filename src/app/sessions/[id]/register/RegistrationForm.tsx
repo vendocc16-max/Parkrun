@@ -125,7 +125,7 @@ export default function RegistrationForm({
       <div className="space-y-4">
         {/* Contact details */}
         <section className="rounded-lg border border-park-border bg-park-white p-6 shadow-sm sm:p-8">
-          <SectionHeader sub="Vi skickar din bekräftelse till e-postadressen nedan.">
+          <SectionHeader sub="Fyll i uppgifter för vuxen kontaktperson. Vi skickar din bekräftelse till e-postadressen nedan.">
             Dina kontaktuppgifter
           </SectionHeader>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -283,22 +283,6 @@ export default function RegistrationForm({
                         className={inputClass(!!pErrors?.dateOfBirth)}
                       />
                     </div>
-                    {!isAdded && (
-                      <div className="flex items-center gap-2.5 pt-5">
-                        <input
-                          id={`participants-${index}-isChild`}
-                          type="checkbox"
-                          {...register(`participants.${index}.isChild`)}
-                          className="h-4 w-4 rounded border-park-border text-park-green focus:ring-park-green/20 accent-park-green"
-                        />
-                        <label
-                          htmlFor={`participants-${index}-isChild`}
-                          className="text-sm text-park-dark"
-                        >
-                          Jag anmäler mig som barn
-                        </label>
-                      </div>
-                    )}
                     <div className="sm:col-span-2">
                       <label
                         htmlFor={`participants-${index}-medicalNotes`}

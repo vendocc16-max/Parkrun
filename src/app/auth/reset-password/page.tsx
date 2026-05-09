@@ -1,55 +1,64 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { signIn } from './actions'
+import { requestPasswordReset } from './actions'
 
 const schema = z.object({
-  email: z.string().email('Enter a valid email address'),
-  password: z.string().min(1, 'Password is required'),
+  email: z.string().email('Ange en giltig e-postadress'),
 })
 
-type LoginForm = z.infer<typeof schema>
+type ResetRequestForm = z.infer<typeof schema>
 
-export default function LoginPage() {
+export default function ResetPasswordPage() {
   const [serverError, setServerError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<LoginForm>({ resolver: zodResolver(schema) })
+  } = useForm<ResetRequestForm>({ resolver: zodResolver(schema) })
 
-  const onSubmit = async (data: LoginForm) => {
+  const onSubmit = async (data: ResetRequestForm) => {
     setServerError(null)
-    const result = await signIn(data)
-    if (result?.error) {
+    setSuccess(null)
+    const result = await requestPasswordReset(data)
+
+    if (result.error) {
       setServerError(result.error)
+    } else if (result.success) {
+      setSuccess(result.success)
     }
   }
 
   return (
     <div className="surface-grid flex min-h-[calc(100vh-8rem)] items-center justify-center bg-park-cream px-4 py-12">
       <div className="relative w-full max-w-sm">
-        {/* Logo mark */}
         <div className="mb-8 text-center">
           <div className="mx-auto mb-3 inline-flex h-10 w-10 items-center justify-center rounded-md bg-park-dark shadow-sm">
             <span className="text-sm font-semibold text-park-lime">P</span>
           </div>
           <h1 className="text-2xl font-semibold tracking-tight text-park-dark">
-            Arrangörsinloggning
+            Återställ lösenord
           </h1>
           <p className="mt-1 text-sm text-park-muted">
-            Logga in för att hantera evenemang och anmälningar.
+            Ange e-postadressen för arrangörskontot.
           </p>
         </div>
 
         <div className="rounded-lg border border-park-border bg-park-white px-7 py-8 shadow-sm">
           {serverError && (
-            <div className="mb-5 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+            <div className="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
               {serverError}
+            </div>
+          )}
+
+          {success && (
+            <div className="mb-5 rounded-lg border border-park-green/25 bg-park-lime px-4 py-3 text-sm font-medium text-park-dark">
+              {success}
             </div>
           )}
 
@@ -57,7 +66,7 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-xs font-semibold text-park-muted uppercase tracking-wider mb-1.5"
+                className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-park-muted"
               >
                 E-post
               </label>
@@ -74,41 +83,21 @@ export default function LoginPage() {
               )}
             </div>
 
-            <div>
-              <div className="mb-1.5 flex items-center justify-between gap-3">
-                <label
-                  htmlFor="password"
-                  className="block text-xs font-semibold text-park-muted uppercase tracking-wider"
-                >
-                  Lösenord
-                </label>
-                <Link
-                  href="/auth/reset-password"
-                  className="text-xs font-semibold text-park-green transition-colors hover:text-park-dark"
-                >
-                  Glömt lösenord?
-                </Link>
-              </div>
-              <input
-                id="password"
-                type="password"
-                autoComplete="current-password"
-                {...register('password')}
-                className="w-full rounded-md border border-park-border bg-park-cream px-3.5 py-2.5 text-sm text-park-dark transition-[background-color,border-color,color,box-shadow] focus:border-park-green focus:outline-none focus:ring-2 focus:ring-park-green/15"
-              />
-              {errors.password && (
-                <p className="mt-1.5 text-xs text-red-600">{errors.password.message}</p>
-              )}
-            </div>
-
             <button
               type="submit"
               disabled={isSubmitting}
               className="mt-2 w-full rounded-md bg-park-dark px-4 py-3 text-sm font-semibold text-park-white shadow-sm transition-[background-color,color,box-shadow,opacity] hover:bg-park-green disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {isSubmitting ? 'Loggar in…' : 'Logga in →'}
+              {isSubmitting ? 'Skickar…' : 'Skicka återställningslänk'}
             </button>
           </form>
+
+          <Link
+            href="/auth/login"
+            className="mt-5 block text-center text-sm font-semibold text-park-green transition-colors hover:text-park-dark"
+          >
+            Tillbaka till inloggning
+          </Link>
         </div>
       </div>
     </div>

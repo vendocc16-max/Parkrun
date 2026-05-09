@@ -1,7 +1,10 @@
 import type { Metadata } from 'next'
 import { Barlow_Condensed, DM_Sans } from 'next/font/google'
 import Link from 'next/link'
+import { connection } from 'next/server'
 import { SentryClientInit } from '@/lib/sentry-client'
+import { getSiteContent } from '@/lib/site-content'
+import { DEFAULT_SITE_CONTENT } from '@/lib/site-content-schema'
 import './globals.css'
 
 const barlowCondensed = Barlow_Condensed({
@@ -16,16 +19,24 @@ const dmSans = DM_Sans({
   weight: ['400', '500', '600'],
 })
 
-export const metadata: Metadata = {
-  title: 'Parkrun Anmälan',
-  description: 'Anmäl dig till kommande Parkrun-evenemang i ditt område',
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getSiteContent('layout')
+
+  return {
+    title: content.metadataTitle,
+    description: content.metadataDescription,
+  }
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  await connection()
+  const content = await getSiteContent('layout')
+  const year = new Date().getFullYear()
+
   return (
     <html
       lang="en"
@@ -39,10 +50,10 @@ export default function RootLayout({
           <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
             <Link href="/" className="flex items-center gap-2.5 group">
               <span className="flex h-7 w-7 items-center justify-center rounded-md bg-park-dark text-park-lime font-sans text-xs font-semibold tracking-tight shadow-sm">
-                P
+                {content.brandInitial}
               </span>
               <span className="text-sm font-semibold tracking-tight text-park-dark">
-                Parkrun
+                {content.brandName}
               </span>
             </Link>
 
@@ -51,13 +62,13 @@ export default function RootLayout({
                 href="/sessions"
                 className="text-park-muted transition-colors hover:text-park-dark"
               >
-                Evenemang
+                {content.navSessionsLabel}
               </Link>
               <Link
                 href="/admin"
                 className="rounded-md border border-park-border bg-park-white px-3 py-2 text-xs font-semibold text-park-dark shadow-sm transition-[background-color,border-color,color,box-shadow] hover:border-park-green/35 hover:bg-park-lime sm:px-4 sm:text-sm"
               >
-                Arrangör
+                {content.navAdminLabel}
               </Link>
             </div>
           </nav>
@@ -69,14 +80,20 @@ export default function RootLayout({
         <footer className="border-t border-park-border bg-park-white">
           <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-4 px-4 py-8 sm:flex-row sm:items-center sm:px-6 lg:px-8">
             <p className="text-xs font-medium text-park-muted">
-              © {new Date().getFullYear()} Parkrun Anmälan
+              © {year} {content.footerCopyright}
             </p>
             <div className="flex gap-6 text-sm text-park-muted">
-              <Link href="/privacy" className="transition-colors hover:text-park-dark">
-                Integritetspolicy
+              <Link
+                href={content.privacyLink.href || DEFAULT_SITE_CONTENT.layout.privacyLink.href}
+                className="transition-colors hover:text-park-dark"
+              >
+                {content.privacyLink.label}
               </Link>
-              <Link href="/terms" className="transition-colors hover:text-park-dark">
-                Användarvillkor
+              <Link
+                href={content.termsLink.href || DEFAULT_SITE_CONTENT.layout.termsLink.href}
+                className="transition-colors hover:text-park-dark"
+              >
+                {content.termsLink.label}
               </Link>
             </div>
           </div>

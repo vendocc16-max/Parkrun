@@ -1,10 +1,17 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
+import { connection } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { getSiteContent } from '@/lib/site-content'
 import type { Session } from '../../../supabase/types'
 
-export const metadata = {
-  title: 'Evenemang | Parkrun Anmälan',
-  description: 'Bläddra bland kommande Parkrun-evenemang och säkra din plats',
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getSiteContent('sessions')
+
+  return {
+    title: content.metadataTitle,
+    description: content.metadataDescription,
+  }
 }
 
 function formatDate(dateStr: string) {
@@ -24,6 +31,8 @@ function formatTime(dateStr: string) {
 }
 
 export default async function SessionsPage() {
+  await connection()
+  const content = await getSiteContent('sessions')
   const supabase = await createClient()
 
   const { data: sessionsData, error } = await supabase
@@ -51,13 +60,13 @@ export default async function SessionsPage() {
       <div className="surface-grid border-b border-park-border bg-park-cream px-4 py-14">
         <div className="mx-auto max-w-5xl">
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-park-accent">
-            Anmäl dig idag
+            {content.eyebrow}
           </p>
           <h1 className="text-4xl font-semibold tracking-tight text-park-dark sm:text-5xl">
-            Kommande evenemang
+            {content.title}
           </h1>
           <p className="mt-3 max-w-md text-sm leading-6 text-park-muted">
-            Bläddra bland tillgängliga Parkrun-evenemang och anmäl din grupp.
+            {content.intro}
           </p>
         </div>
       </div>
@@ -70,10 +79,10 @@ export default async function SessionsPage() {
               <span className="h-2 w-2 rounded-full bg-park-accent" />
             </div>
             <p className="mb-2 text-lg font-semibold text-park-dark">
-              Evenemang kunde inte hämtas
+              {content.fetchErrorTitle}
             </p>
             <p className="mx-auto max-w-md text-sm leading-6 text-park-muted">
-              Kontrollera Supabase-konfigurationen och ladda om sidan.
+              {content.fetchErrorBody}
             </p>
           </div>
         ) : sessions.length === 0 ? (
@@ -82,10 +91,10 @@ export default async function SessionsPage() {
               <span className="h-2 w-2 rounded-full bg-park-accent" />
             </div>
             <p className="mb-2 text-lg font-semibold text-park-dark">
-              Inga evenemang ännu
+              {content.emptyTitle}
             </p>
             <p className="text-sm text-park-muted">
-              Kom tillbaka snart — nya evenemang läggs till regelbundet.
+              {content.emptyBody}
             </p>
           </div>
         ) : (
@@ -114,11 +123,11 @@ export default async function SessionsPage() {
                       </h2>
                       {isFull ? (
                         <span className="rounded-full bg-park-muted/10 px-2.5 py-0.5 text-xs font-semibold text-park-muted">
-                          Fullbokad
+                          {content.fullStatusLabel}
                         </span>
                       ) : (
                         <span className="rounded-full bg-park-lime px-2.5 py-0.5 text-xs font-semibold text-park-green">
-                          Öppen
+                          {content.openStatusLabel}
                         </span>
                       )}
                     </div>
@@ -141,8 +150,14 @@ export default async function SessionsPage() {
                       )}
                       <span className={`font-medium ${isFull ? 'text-park-muted' : 'text-park-green'}`}>
                         {isFull
-                          ? (session.waitlist_enabled ? 'Väntelista tillgänglig' : 'Inga platser kvar')
-                          : `${spotsLeft} plats${spotsLeft === 1 ? '' : 'er'} kvar`}
+                          ? (session.waitlist_enabled
+                              ? content.waitlistAvailableLabel
+                              : content.noSpotsLabel)
+                          : `${spotsLeft} ${
+                              spotsLeft === 1
+                                ? content.spotsLeftSingular
+                                : content.spotsLeftPlural
+                            }`}
                       </span>
                     </div>
                   </div>
@@ -156,7 +171,7 @@ export default async function SessionsPage() {
                           : 'bg-park-dark text-park-white shadow-sm hover:bg-park-green'
                       }`}
                     >
-                      {isFull ? 'Gå med i väntelista' : 'Visa & anmäl'}
+                      {isFull ? content.waitlistCtaLabel : content.openCtaLabel}
                       <span aria-hidden="true">→</span>
                     </Link>
                   </div>

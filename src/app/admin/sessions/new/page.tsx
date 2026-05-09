@@ -251,5 +251,3 @@ function SessionFormFields({
     </>
   )
 }
-
-export { SessionFormFields }

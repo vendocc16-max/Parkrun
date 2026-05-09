@@ -167,6 +167,14 @@ export type RateLimitEvent = {
   created_at: string
 }
 
+export type SiteContent = {
+  key: string
+  payload: Json
+  updated_by: string | null
+  created_at: string
+  updated_at: string
+}
+
 // =============================================================
 // Insert payload types — flat types required by supabase-js v2
 // (Omit<T, K> causes type inference issues with RejectExcessProperties)
@@ -277,6 +285,16 @@ export type InsertRateLimitEvent = {
 }
 /** Rate limit events are append-only */
 export type UpdateRateLimitEvent = never
+
+export type InsertSiteContent = {
+  key: string
+  payload: Json
+  updated_by?: string | null
+}
+export type UpdateSiteContent = {
+  payload?: Json
+  updated_by?: string | null
+}
 
 // =============================================================
 // Database type — for use with createClient<Database>() from
@@ -429,6 +447,19 @@ export type Database = {
         Insert: InsertRateLimitEvent & { id?: string; created_at?: string }
         Update: UpdateRateLimitEvent
         Relationships: []
+      }
+      site_content: {
+        Row: SiteContent
+        Insert: InsertSiteContent & { created_at?: string; updated_at?: string }
+        Update: UpdateSiteContent & { updated_at?: string }
+        Relationships: [
+          {
+            foreignKeyName: 'site_content_updated_by_fkey'
+            columns: ['updated_by']
+            referencedRelation: 'organizers'
+            referencedColumns: ['id']
+          },
+        ]
       }
     }
     Views: Record<string, never>
