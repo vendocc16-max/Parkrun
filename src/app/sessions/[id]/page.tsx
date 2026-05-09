@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import EventMapLoader from '@/components/event-map-loader'
 import type { Session } from '../../../../supabase/types'
 
 interface Props {
@@ -197,6 +198,18 @@ export default async function SessionDetailPage({ params }: Props) {
             )}
           </dl>
         </div>
+
+        {/* Map */}
+        {session.latitude != null && session.longitude != null && (
+          <div className="mb-5 overflow-hidden rounded-lg border border-park-border bg-park-white shadow-sm">
+            <EventMapLoader
+              lat={Number(session.latitude)}
+              lng={Number(session.longitude)}
+              label={session.title}
+              className="h-72 w-full"
+            />
+          </div>
+        )}
 
         {/* Notes */}
         {session.notes && (

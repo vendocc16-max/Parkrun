@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { updateSession, type SessionFormData } from '../../actions'
+import { parseOsmUrl } from '@/lib/osm'
 import type { Session } from '../../../../../../supabase/types'
 
 const schema = z.object({
@@ -15,6 +16,8 @@ const schema = z.object({
     .regex(/^[a-z0-9-]+$/, 'Slug must be lowercase letters, numbers, and hyphens only'),
   description: z.string(),
   location: z.string(),
+  latitude: z.string(),
+  longitude: z.string(),
   event_date: z.string().min(1, 'Event date is required'),
   registration_opens_at: z.string(),
   registration_closes_at: z.string(),
@@ -34,9 +37,11 @@ function toDatetimeLocal(iso: string | null): string {
 
 export function EditSessionForm({ session }: { session: Session }) {
   const [serverError, setServerError] = useState<string | null>(null)
+  const [osmUrl, setOsmUrl] = useState('')
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -45,6 +50,8 @@ export function EditSessionForm({ session }: { session: Session }) {
       slug: session.slug,
       description: session.description ?? '',
       location: session.location ?? '',
+      latitude: session.latitude != null ? String(session.latitude) : '',
+      longitude: session.longitude != null ? String(session.longitude) : '',
       event_date: toDatetimeLocal(session.event_date),
       registration_opens_at: toDatetimeLocal(session.registration_opens_at),
       registration_closes_at: toDatetimeLocal(session.registration_closes_at),
@@ -105,6 +112,60 @@ export function EditSessionForm({ session }: { session: Session }) {
             {...register('location')}
             className="w-full rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
           />
+        </div>
+
+        <div className="sm:col-span-2 rounded-md border border-dashed border-park-border bg-park-cream/40 p-4">
+          <p className="text-sm font-medium text-park-dark">Karta</p>
+          <p className="mt-1 text-xs text-park-muted">
+            Klistra in en länk från openstreetmap.org (t.ex.{' '}
+            <code>#map=17/59.310975/18.074643</code>) och klicka &quot;Fyll i&quot; — eller skriv
+            koordinaterna direkt.
+          </p>
+          <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+            <input
+              type="text"
+              value={osmUrl}
+              onChange={(e) => setOsmUrl(e.target.value)}
+              placeholder="https://www.openstreetmap.org/#map=17/59.310975/18.074643"
+              className="flex-1 rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
+            />
+            <button
+              type="button"
+              onClick={() => {
+                const coords = parseOsmUrl(osmUrl)
+                if (!coords) {
+                  setServerError('Kunde inte tolka OpenStreetMap-länken.')
+                  return
+                }
+                setServerError(null)
+                setValue('latitude', String(coords.lat), { shouldDirty: true })
+                setValue('longitude', String(coords.lng), { shouldDirty: true })
+              }}
+              className="rounded-md border border-park-border bg-park-white px-4 py-2 text-sm font-semibold text-park-dark hover:bg-park-cream"
+            >
+              Fyll i
+            </button>
+          </div>
+          <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div>
+              <label className="block text-xs font-medium text-park-muted mb-1">Latitude</label>
+              <input
+                type="number"
+                step="0.000001"
+                {...register('latitude')}
+                className="w-full rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-park-muted mb-1">Longitude</label>
+              <input
+                type="number"
+                step="0.000001"
+                {...register('longitude')}
+                className="w-full rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
+              />
+            </div>
+          </div>
         </div>
 
         <div className="sm:col-span-2">

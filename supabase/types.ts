@@ -64,6 +64,8 @@ export type Session = {
   title: string
   description: string | null
   location: string | null
+  latitude: number | null
+  longitude: number | null
   event_date: string
   registration_opens_at: string | null
   registration_closes_at: string | null
@@ -197,6 +199,8 @@ export type InsertSession = {
   slug: string
   description?: string | null
   location?: string | null
+  latitude?: number | null
+  longitude?: number | null
   event_date: string
   registration_opens_at?: string | null
   registration_closes_at?: string | null

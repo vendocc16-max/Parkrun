@@ -11,6 +11,8 @@ export type SessionFormData = {
   slug: string
   description: string
   location: string
+  latitude: string
+  longitude: string
   event_date: string
   registration_opens_at: string
   registration_closes_at: string
@@ -19,6 +21,14 @@ export type SessionFormData = {
   pricing_info: string
   notes: string
   status: SessionStatus
+}
+
+function parseCoord(value: string): number | null {
+  if (value == null) return null
+  const trimmed = String(value).trim()
+  if (!trimmed) return null
+  const n = Number(trimmed)
+  return Number.isFinite(n) ? n : null
 }
 
 async function getAuthUser() {
@@ -57,6 +67,8 @@ export async function createSession(
     slug: data.slug,
     description: data.description || null,
     location: data.location || null,
+    latitude: parseCoord(data.latitude),
+    longitude: parseCoord(data.longitude),
     event_date: data.event_date,
     registration_opens_at: data.registration_opens_at || null,
     registration_closes_at: data.registration_closes_at || null,
@@ -98,6 +110,8 @@ export async function updateSession(
     slug: data.slug,
     description: data.description || null,
     location: data.location || null,
+    latitude: parseCoord(data.latitude),
+    longitude: parseCoord(data.longitude),
     event_date: data.event_date,
     registration_opens_at: data.registration_opens_at || null,
     registration_closes_at: data.registration_closes_at || null,

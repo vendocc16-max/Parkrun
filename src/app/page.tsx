@@ -1,10 +1,27 @@
 import Link from 'next/link'
 import { connection } from 'next/server'
 import { getSiteContent } from '@/lib/site-content'
+import { createClient } from '@/lib/supabase/server'
+import EventMapLoader from '@/components/event-map-loader'
+import type { Session } from '../../supabase/types'
 
 export default async function Home() {
   await connection()
   const content = await getSiteContent('home')
+
+  let featured: Session | null = null
+  if (content.featuredSessionSlug) {
+    const supabase = await createClient()
+    const { data } = await supabase
+      .from('sessions')
+      .select('*')
+      .eq('slug', content.featuredSessionSlug)
+      .maybeSingle()
+    featured = (data as Session | null) ?? null
+    if (featured && (featured.status === 'draft' || featured.status === 'cancelled')) {
+      featured = null
+    }
+  }
 
   return (
     <>
@@ -87,6 +104,60 @@ export default async function Home() {
           ))}
         </div>
       </section>
+
+      {featured && (
+        <section className="border-b border-park-border bg-park-white px-4 py-16">
+          <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+            <div>
+              {content.featuredEyebrow && (
+                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-park-accent">
+                  {content.featuredEyebrow}
+                </p>
+              )}
+              <h2 className="text-3xl font-semibold tracking-tight text-park-dark sm:text-4xl">
+                {content.featuredHeading || featured.title}
+              </h2>
+              <p className="mt-4 text-base font-medium text-park-dark">{featured.title}</p>
+              <p className="mt-1 text-sm text-park-muted">
+                {new Date(featured.event_date).toLocaleString('sv-SE', {
+                  weekday: 'long',
+                  day: 'numeric',
+                  month: 'long',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+                {featured.location ? ` · ${featured.location}` : ''}
+              </p>
+              {featured.description && (
+                <p className="mt-4 text-sm leading-6 text-park-muted">{featured.description}</p>
+              )}
+              <Link
+                href={`/sessions/${featured.slug}`}
+                className="mt-6 inline-flex items-center justify-center rounded-md bg-park-green px-5 py-3 text-sm font-semibold text-park-white shadow-sm transition-[background-color,color,box-shadow] hover:bg-park-dark"
+              >
+                Visa evenemang
+                <span aria-hidden="true" className="ml-2">
+                  →
+                </span>
+              </Link>
+            </div>
+            <div>
+              {featured.latitude != null && featured.longitude != null ? (
+                <EventMapLoader
+                  lat={Number(featured.latitude)}
+                  lng={Number(featured.longitude)}
+                  label={featured.title}
+                  className="h-80 w-full overflow-hidden rounded-lg border border-park-border"
+                />
+              ) : (
+                <div className="flex h-80 items-center justify-center rounded-lg border border-dashed border-park-border bg-park-cream/40 text-sm text-park-muted">
+                  Ingen kartposition angiven för detta evenemang.
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section id="how-it-works" className="bg-park-cream px-4 py-20">
         <div className="mx-auto max-w-6xl">

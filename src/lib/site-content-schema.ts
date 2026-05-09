@@ -62,6 +62,9 @@ const homeContentSchema = z.object({
   contactBody: longText,
   contactButtonLabel: shortText,
   contactEmail: shortText.email(),
+  featuredSessionSlug: z.string().trim().default(''),
+  featuredEyebrow: z.string().trim().default(''),
+  featuredHeading: z.string().trim().default(''),
 })
 
 const sessionsContentSchema = z.object({
@@ -175,6 +178,9 @@ export const DEFAULT_SITE_CONTENT: SiteContentMap = {
     contactBody: 'Kontakta din lokala arrangör eller hör av dig direkt.',
     contactButtonLabel: 'Kontakta oss',
     contactEmail: 'ivantruedson@gmail.com',
+    featuredSessionSlug: '',
+    featuredEyebrow: 'Veckans pass',
+    featuredHeading: 'Hitta hit',
   },
   sessions: {
     metadataTitle: 'Evenemang | Parkrun Anmälan',

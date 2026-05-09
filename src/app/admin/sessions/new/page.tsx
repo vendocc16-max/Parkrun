@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import Link from 'next/link'
 import { createSession, type SessionFormData } from '../actions'
+import { parseOsmUrl } from '@/lib/osm'
 
 const schema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -15,6 +16,8 @@ const schema = z.object({
     .regex(/^[a-z0-9-]+$/, 'Slug must be lowercase letters, numbers, and hyphens only'),
   description: z.string(),
   location: z.string(),
+  latitude: z.string(),
+  longitude: z.string(),
   event_date: z.string().min(1, 'Event date is required'),
   registration_opens_at: z.string(),
   registration_closes_at: z.string(),
@@ -29,9 +32,11 @@ type FormValues = z.infer<typeof schema>
 
 export default function NewSessionPage() {
   const [serverError, setServerError] = useState<string | null>(null)
+  const [osmUrl, setOsmUrl] = useState('')
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -40,12 +45,25 @@ export default function NewSessionPage() {
       waitlist_enabled: false,
       description: '',
       location: '',
+      latitude: '',
+      longitude: '',
       pricing_info: '',
       notes: '',
       registration_opens_at: '',
       registration_closes_at: '',
     },
   })
+
+  const fillFromOsm = () => {
+    const coords = parseOsmUrl(osmUrl)
+    if (!coords) {
+      setServerError('Kunde inte tolka OpenStreetMap-länken.')
+      return
+    }
+    setServerError(null)
+    setValue('latitude', String(coords.lat), { shouldDirty: true })
+    setValue('longitude', String(coords.lng), { shouldDirty: true })
+  }
 
   const onSubmit = async (data: FormValues) => {
     setServerError(null)
@@ -70,7 +88,13 @@ export default function NewSessionPage() {
         onSubmit={handleSubmit(onSubmit)}
         className="rounded-lg border border-park-border bg-park-white p-6 shadow-sm space-y-6"
       >
-        <SessionFormFields register={register} errors={errors} />
+        <SessionFormFields
+          register={register}
+          errors={errors}
+          osmUrl={osmUrl}
+          setOsmUrl={setOsmUrl}
+          onFillFromOsm={fillFromOsm}
+        />
 
         <div className="flex gap-3 pt-2">
           <button
@@ -97,13 +121,16 @@ type FieldErrors = Partial<Record<keyof FormValues, { message?: string }>>
 function SessionFormFields({
   register,
   errors,
-  defaults,
+  osmUrl,
+  setOsmUrl,
+  onFillFromOsm,
 }: {
   register: ReturnType<typeof useForm<FormValues>>['register']
   errors: FieldErrors
-  defaults?: Partial<FormValues>
+  osmUrl: string
+  setOsmUrl: (v: string) => void
+  onFillFromOsm: () => void
 }) {
-  void defaults
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -139,6 +166,51 @@ function SessionFormFields({
             {...register('location')}
             className="w-full rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
           />
+        </div>
+
+        <div className="sm:col-span-2 rounded-md border border-dashed border-park-border bg-park-cream/40 p-4">
+          <p className="text-sm font-medium text-park-dark">Karta</p>
+          <p className="mt-1 text-xs text-park-muted">
+            Klistra in en länk från openstreetmap.org (t.ex.{' '}
+            <code>#map=17/59.310975/18.074643</code>) och klicka &quot;Fyll i&quot; — eller skriv
+            koordinaterna direkt.
+          </p>
+          <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+            <input
+              type="text"
+              value={osmUrl}
+              onChange={(e) => setOsmUrl(e.target.value)}
+              placeholder="https://www.openstreetmap.org/#map=17/59.310975/18.074643"
+              className="flex-1 rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
+            />
+            <button
+              type="button"
+              onClick={onFillFromOsm}
+              className="rounded-md border border-park-border bg-park-white px-4 py-2 text-sm font-semibold text-park-dark hover:bg-park-cream"
+            >
+              Fyll i
+            </button>
+          </div>
+          <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div>
+              <label className="block text-xs font-medium text-park-muted mb-1">Latitude</label>
+              <input
+                type="number"
+                step="0.000001"
+                {...register('latitude')}
+                className="w-full rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-park-muted mb-1">Longitude</label>
+              <input
+                type="number"
+                step="0.000001"
+                {...register('longitude')}
+                className="w-full rounded-md border border-park-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-park-green/20"
+              />
+            </div>
+          </div>
         </div>
 
         <div className="sm:col-span-2">
